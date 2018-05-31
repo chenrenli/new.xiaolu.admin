@@ -1,0 +1,85 @@
+{include file="public/header" /}
+<body>
+<div class="pd-20">
+    <form action="{:url('admin/position/editAd')}" method="post" class="form form-horizontal" id="form-add">
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>sdk：</label>
+            <div class="formControls col-5">
+                <select class="select-box" name="sdk_id">
+                    <option value="0">请选择</option>
+                    {volist name="sdk_list" id="sdk"}
+                    <option value="{$sdk.id}" {if condition="$sdk.id eq $app_ad.sdk_id"}selected="selected"{/if}>{$sdk.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>广告类型：</label>
+            <div class="formControls col-5">
+                <select class="select-box" name="position_id">
+                    <option value="0">请选择</option>
+                    {volist name="position_list" id="position"}
+                    <option value="{$position.id}" {if condition="$position.id eq $app_ad.position_id"}selected="selected"{/if}>{$position.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>AppId：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$app_ad.appid}" placeholder="" name="appid" datatype="*2-200"
+                       nullmsg="app不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>广告位ID：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$app_ad.adid}" placeholder="" name="adid" datatype="*2-200"
+                       nullmsg="广告位ID不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+
+        <div class="row cl">
+            <div class="col-9 col-offset-3">
+                <input type="hidden" name="id" value="{$id}"/>
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript">
+    var url = "{$url}";
+    $("#form-add").Validform({
+        tiptype: 2,
+        callback: function (form) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#form-add").serializeArray(),
+                dataType: "json",
+                success: function (obj) {
+                    if (obj.code == 200) {
+                        /*
+                         var index = parent.layer.getFrameIndex(window.name);
+                         parent.$('.btn-refresh').click();
+                         parent.layer.close(index);
+                         */
+                        parent.location.reload(true);
+                    } else {
+                        alert(obj.msg);
+                    }
+
+                }
+            });
+            return false;
+        }
+    });
+</script>
+</body>
+</html>
