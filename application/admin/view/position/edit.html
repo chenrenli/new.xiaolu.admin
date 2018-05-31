@@ -3,6 +3,15 @@
 <div class="pd-20">
     <form action="{:url('admin/position/edit')}" method="post" class="form form-horizontal" id="form-add">
         <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>类型英文名称：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$info.name}" placeholder="" name="name" datatype="*2-200"
+                       nullmsg="名称不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>广告类型名称：</label>
             <div class="formControls col-5">
                 <input type="text" class="input-text" value="{$info.title}" placeholder="" name="title" datatype="*2-200"

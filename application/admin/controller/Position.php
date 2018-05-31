@@ -33,10 +33,13 @@ class Position extends Base
     {
         if ($this->request->isPost()) {
             $title = input("title");
+            $name = input("name");
             $validate = Validate::make([
                 'title' => "require",
+                "name" => 'require',
             ]);
             $data['title'] = $title;
+            $data['name'] = $name;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -58,12 +61,15 @@ class Position extends Base
         if ($this->request->isPost()) {
             $title = input("title");
             $id = input("id");
+            $name = input("name");
             $validate = Validate::make([
                 'title' => "require",
+                'name' => 'require',
                 "id" => "require",
             ]);
             $data['title'] = $title;
             $data['id'] = $id;
+            $data['name'] = $name;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }

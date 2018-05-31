@@ -30,6 +30,7 @@ class Position extends Migrator
     {
         $sql = "create table `xl_position`(
 id int(11) unsigned not null auto_increment PRIMARY key,
+`name` varchar(20) not null default '' comment'英文名称',
 title varchar(200) not null default '' comment'类型名称',
 status tinyint(1) not null default 1 comment'是否有效:0无,1有'
 )engine=innodb default charset=utf8 comment'广告类型'";
