@@ -31,11 +31,11 @@ class App extends Base
         $admin_list = $admin_list['data'];
 
         //获取应用设置sdk的情况
-        if($admin_list){
-            foreach($admin_list as &$val){
+        if ($admin_list) {
+            foreach ($admin_list as &$val) {
                 $app_id = $val['id'];
                 $appAdModel = new AppAd();
-                $app_ad_list = $appAdModel->where("app_id",$app_id)->select();
+                $app_ad_list = $appAdModel->where("app_id", $app_id)->select();
                 $val['app_ad_list'] = $app_ad_list;
             }
         }
@@ -200,10 +200,15 @@ class App extends Base
             }
             $data['app_id'] = $data['id'];
             unset($data['id']);
+            //查找是否添加重复
+            $app_ad = AppAd::where("position_id", $position_id)->where("app_id", $id)->find();
+            if ($app_ad) {
+                return output_error("同一包名存在相同的广告");
+            }
             $positionModel = new Position();
-            $position = $positionModel->where("id",$position_id)->find();
+            $position = $positionModel->where("id", $position_id)->find();
             $sdkModel = new Sdk();
-            $sdk = $sdkModel->where("id",$sdk_id)->find();
+            $sdk = $sdkModel->where("id", $sdk_id)->find();
             $data['sdk_title'] = $sdk->title;
             $data['position_title'] = $position->title;
             $appAdModel = new AppAd();
@@ -228,7 +233,8 @@ class App extends Base
         }
     }
 
-    public function editAd(){
+    public function editAd()
+    {
         if ($this->request->isPost()) {
             $sdk_id = input("sdk_id");
             $appid = input("appid");
@@ -251,14 +257,23 @@ class App extends Base
                 return output_error($validate->getError());
             }
             unset($data['id']);
+            $app_ad = AppAd::where("id", "=", $id)->find();
+            if (!$app_ad) {
+                return output_error("不存在广告sdk");
+            }
+            $res = AppAd::where("position_id", $position_id)->whereNotIn("id", $id)->where("app_id",
+                $app_ad->app_id)->find();
+            if ($res) {
+                return output_error("已存在同一个广告");
+            }
             $positionModel = new Position();
-            $position = $positionModel->where("id",$position_id)->find();
+            $position = $positionModel->where("id", $position_id)->find();
             $sdkModel = new Sdk();
-            $sdk = $sdkModel->where("id",$sdk_id)->find();
+            $sdk = $sdkModel->where("id", $sdk_id)->find();
             $data['sdk_title'] = $sdk->title;
             $data['position_title'] = $position->title;
             $appAdModel = new AppAd();
-            $res = $appAdModel->saveData($data,['id'=>$id]);
+            $res = $appAdModel->saveData($data, ['id' => $id]);
             if ($res) {
                 return output_data([], 200, ["msg" => "设置sdk成功"]);
             } else {
@@ -269,7 +284,7 @@ class App extends Base
         } else {
             $id = input("id");
             $appAdModel = new AppAd();
-            $app_ad = $appAdModel->where("id",$id)->find();
+            $app_ad = $appAdModel->where("id", $id)->find();
 
             $sdkModel = new Sdk();
             $sdk_list = $sdkModel->select();
@@ -278,7 +293,7 @@ class App extends Base
             $this->assign("position_list", $position_list);
             $this->assign("sdk_list", $sdk_list);
             $this->assign("id", $id);
-            $this->assign("app_ad",$app_ad);
+            $this->assign("app_ad", $app_ad);
             return $this->fetch();
         }
     }
@@ -286,7 +301,8 @@ class App extends Base
     /**
      * 删除广告
      */
-    public function delAd(){
+    public function delAd()
+    {
         if ($this->request->isAjax()) {
             $id = $this->request->param("id");
             $map['id'] = array("in", $id);
