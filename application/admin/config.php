@@ -61,6 +61,19 @@ $menu = array(
             ),
         ),
         array(
+            'name' => "更新管理",
+            'title' => "更新管理",
+            'child' => array(
+                array(
+                    'name' => "update",
+                    'title' => "更新管理",
+                    'controller' => 'update',
+                    'action' => 'index',
+                ),
+
+            ),
+        ),
+        array(
             'name' => "admin",
             'title' => "管理员",
             'child' => array(
