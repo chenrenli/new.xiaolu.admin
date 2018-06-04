@@ -190,7 +190,6 @@ class App extends Base
                 "adid" => "require",
                 "id" => "require",
                 "position_id" => "require",
-                "adpackagename" => "require",
             ]);
             $data['sdk_id'] = $sdk_id;
             $data['position_id'] = $position_id;
@@ -242,7 +241,7 @@ class App extends Base
             $sdk_id = input("sdk_id");
             $appid = input("appid");
             $adid = input("adid");
-            $adpackname = input("adpackagename");
+            $adpackname = input("adpackagename","");
             $id = input("id");
             $position_id = input("position_id");
             $validate = Validate::make([
@@ -250,7 +249,6 @@ class App extends Base
                 "appid" => "require",
                 "adid" => "require",
                 "id" => "require",
-                "adpackagename" => "require",
                 "position_id" => "require",
             ]);
             $data['sdk_id'] = $sdk_id;
