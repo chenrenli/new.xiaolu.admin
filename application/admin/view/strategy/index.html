@@ -1,28 +1,25 @@
 ﻿{include file="public/header" /}
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
-    <span class="c-gray en">&gt;</span> 应用管理 <span class="c-gray en">&gt;</span> 应用列表 <a
+    <span class="c-gray en">&gt;</span> 策略管理 <span class="c-gray en">&gt;</span> 策略列表 <a
             class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px"
             href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 
     <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
         <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-        <a href="javascript:;" onclick="add('添加应用','{:url('admin/app/add')}','800','300')"
-           class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加应用</a></span> <span
+        <a href="javascript:;" onclick="add('添加策略','{:url('admin/strategy/add')}','800','300')"
+           class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加策略</a></span> <span
             class="r">共有数据：<strong>{$total}</strong> 条</span></div>
     <table class="table table-border table-bordered table-bg">
         <thead>
         <tr>
-            <th scope="col" colspan="9">应用列表</th>
+            <th scope="col" colspan="9">策略列表</th>
         </tr>
         <tr class="text-c">
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
-            <th width="150">包名</th>
-            <th width="150">游戏名称</th>
-            <th width="150">渠道名称</th>
-            <th width="300">接入sdk</th>
+            <th width="150">策略名称</th>
             <th width="100">操作</th>
         </tr>
         </thead>
@@ -31,29 +28,11 @@
         <tr class="text-c">
             <td><input type="checkbox" value="{$data.id}" name="ids[]"></td>
             <td>{$data.id}</td>
-            <td>{$data.packagename}</td>
-            <td>{$data.gamename}</td>
-            <td>{$data.channel_title}</td>
-            <td style="text-align: center">
+            <td>{$data.title}</td>
 
-                {volist name="$data.app_ad_list" id="ad"}
-                <p>{$ad.position_title}(sdk:{$ad.sdk_title})
-                    <a style="color:blue;"
-                       onclick="edit('设置sdk','{:url('admin/app/editAd',array('id'=>$ad['id']))}','1','800','500')">设置</a>&nbsp;&nbsp;
-                    <a title="删除" href="javascript:;" onclick="delAd(this,'{$ad.id}')" class="ml-5"
-                       style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
-                </p>
-                {/volist}
-
-            </td>
             <td class="td-manage">
-                <a title="设置sdk" href="javascript:;"
-                   onclick="edit('设置sdk','{:url('admin/app/setAd',array('id'=>$data['id']))}','1','800','500')"
-                   class="ml-5" style="text-decoration:none;color:blue;">
-                    <i class="Hui-iconfont">设置sdk</i>
-                </a>
                 <a title="编辑" href="javascript:;"
-                   onclick="edit('应用编辑','{:url('admin/app/edit',array('id'=>$data['id']))}','1','800','500')"
+                   onclick="edit('策略编辑','{:url('admin/strategy/edit',array('id'=>$data['id']))}','1','800','500')"
                    class="ml-5" style="text-decoration:none">
                     <i class="Hui-iconfont">&#xe6df;</i></a>
                 <a title="删除" href="javascript:;" onclick="del(this,'{$data.id}')" class="ml-5"
@@ -76,32 +55,7 @@
         layer.confirm('确认要删除吗？', function (index) {
             $.ajax({
                 type: "post",
-                url: "{:url('app/delete')}",
-                data: {"id": id},
-                dataType: "json",
-                success: function (obj) {
-                    if (obj.code == 200) {
-                        $(obj).parents("tr").remove();
-                        layer.msg('已删除!', {icon: 1, time: 1000});
-                    } else {
-                        layer.msg(obj.msg);
-                    }
-
-                }
-            });
-
-        });
-    }
-    /**
-     * 删除广告
-     * @param obj
-     * @param id
-     */
-    function delAd(obj, id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            $.ajax({
-                type: "post",
-                url: "{:url('app/delAd')}",
+                url: "{:url('strategy/delete')}",
                 data: {"id": id},
                 dataType: "json",
                 success: function (obj) {
@@ -134,7 +88,7 @@
             return false;
         }
         ids = ids.substr(0, ids.length - 1);
-        var url = "{:url('app/delete')}";
+        var url = "{:url('strategy/delete')}";
 
         layer.confirm('确认要删除吗？', function (index) {
             //此处请求后台程序，下方是成功后的前台处理……

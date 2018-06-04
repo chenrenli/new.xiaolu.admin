@@ -181,6 +181,7 @@ class App extends Base
             $sdk_id = input("sdk_id");
             $appid = input("appid");
             $adid = input("adid");
+            $adpackagename = input("adpackagename");
             $id = input("id");
             $position_id = input("position_id");
             $validate = Validate::make([
@@ -189,12 +190,14 @@ class App extends Base
                 "adid" => "require",
                 "id" => "require",
                 "position_id" => "require",
+                "adpackagename" => "require",
             ]);
             $data['sdk_id'] = $sdk_id;
             $data['position_id'] = $position_id;
             $data['adid'] = $adid;
             $data['appid'] = $appid;
             $data['id'] = $id;
+            $data['adpackagename'] = $adpackagename;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -239,6 +242,7 @@ class App extends Base
             $sdk_id = input("sdk_id");
             $appid = input("appid");
             $adid = input("adid");
+            $adpackname = input("adpackagename");
             $id = input("id");
             $position_id = input("position_id");
             $validate = Validate::make([
@@ -246,6 +250,7 @@ class App extends Base
                 "appid" => "require",
                 "adid" => "require",
                 "id" => "require",
+                "adpackagename" => "require",
                 "position_id" => "require",
             ]);
             $data['sdk_id'] = $sdk_id;
@@ -253,6 +258,7 @@ class App extends Base
             $data['adid'] = $adid;
             $data['appid'] = $appid;
             $data['id'] = $id;
+            $data['adpackagename'] = $adpackname;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }

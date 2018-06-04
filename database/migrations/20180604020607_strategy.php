@@ -3,7 +3,7 @@
 use think\migration\Migrator;
 use think\migration\db\Column;
 
-class AppAd extends Migrator
+class Strategy extends Migrator
 {
     /**
      * Change Method.
@@ -28,18 +28,15 @@ class AppAd extends Migrator
      */
     public function change()
     {
-        $sql = "create table `xl_app_ad`(
+        $sql = "create table `xl_strategy`(
 id int(11) unsigned not null auto_increment primary key,
-sdk_id int(10) unsigned not null default 0 comment'sdkId',
-sdk_title varchar(100) not null default '' comment'sdk名称',
-app_id int(10) unsigned not null default 0 comment'app Id',
+title varchar(200) not null default '' comment'名称',
 position_id int(10) unsigned not null default 0 comment'广告类型ID',
-position_title varchar(200) not null default '' comment'广告类型名称',
-adid varchar(100) not null default '' comment'第三方广告ID',
-appid varchar(100) not null default '' comment'第三方应用ID',
-adpackagename varchar(100) not null default '' comment'第三方广告包名',
-status tinyint(1) unsigned not null default 0 comment'是否有效:0无,1是'
-)engine=innodb default charset=utf8 comment'应用关联的广告'";
+weight int(10) unsigned not null default 0 comment'权重',
+create_time int(11) unsigned not null default 0 comment'创建时间',
+update_time int(11) unsigned not null default 0 comment'更新时间',
+status tinyint(1) unsigned not null default 1 comment'开启状态:1开启,0关闭'
+)engine=innodb default charset=utf8 comment'流量策略表'";
         \think\Db::execute($sql);
     }
 }

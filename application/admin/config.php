@@ -9,6 +9,19 @@
 $menu = array(
     'admin_menu' => array(
         array(
+            'name' => "strategy",
+            'title' => "流量策略",
+            'child' => array(
+                array(
+                    'name' => "strategy",
+                    'title' => "流量策略",
+                    'controller' => 'strategy',
+                    'action' => 'index',
+                ),
+
+            ),
+        ),
+        array(
             'name' => "sdk",
             'title' => "应用管理",
             'child' => array(
