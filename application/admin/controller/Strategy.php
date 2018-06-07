@@ -403,6 +403,15 @@ class Strategy extends Base
             //获取广告类型列表
             $position_list = Position::all();
             $ad_list = Ad::all(['status' => 1]);
+            if ($ad_list) {
+                foreach ($ad_list as &$ad) {
+                    $position = Position::find($ad->position_id);
+                    $sdk = Sdk::find($ad->sdk_id);
+                    if ($sdk) {
+                        $ad->title = $sdk->title . "-" . $position->title . "-" . $ad->title;
+                    }
+                }
+            }
             //获取渠道列表
             $channel_list = Channel::all();
             $this->assign("channel_list", $channel_list);
