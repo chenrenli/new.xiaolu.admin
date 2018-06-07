@@ -42,9 +42,10 @@ class Update extends Base
                 'version' => "require",
                 "file_path" => "require",
                 "key" => "require",
+                "type" => "require",
             ]);
             $data['version'] = $version;
-            $data['ver'] = str_replace(".","",$version);
+            $data['ver'] = str_replace(".", "", $version);
             $data['file_path'] = $file_path;
             $data['sdk_id'] = $sdk_id;
             $data['key'] = $key;
@@ -62,7 +63,7 @@ class Update extends Base
         } else {
             //获取sdk列表
             $sdkList = Sdk::where([])->select();
-            $this->assign("sdk_list",$sdkList);
+            $this->assign("sdk_list", $sdkList);
             return $this->fetch();
         }
 
@@ -87,10 +88,11 @@ class Update extends Base
                 "file_path" => "require",
                 "sdk_id" => "require",
                 "key" => "require",
+                "type" => 'require',
 
             ]);
             $data['version'] = $version;
-            $data['ver'] = str_replace(".","",$version);
+            $data['ver'] = str_replace(".", "", $version);
             $data['file_path'] = $file_path;
             $data['id'] = $id;
             $data['sdk_id'] = $sdk_id;
@@ -113,7 +115,7 @@ class Update extends Base
             $info = \app\common\model\Update::get($id);
             //获取sdk列表
             $sdkList = Sdk::where([])->select();
-            $this->assign("sdk_list",$sdkList);
+            $this->assign("sdk_list", $sdkList);
             $this->assign("info", $info);
             $this->assign("id", $id);
             return $this->fetch("edit");

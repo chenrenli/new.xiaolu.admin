@@ -19,6 +19,7 @@
         <tr class="text-c">
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
+            <th width="100">类型</th>
             <th width="150">版本号</th>
             <th width="150">更新文件路径</th>
             <th width="100">操作</th>
@@ -29,6 +30,7 @@
         <tr class="text-c">
             <td><input type="checkbox" value="{$data.id}" name="ids[]"></td>
             <td>{$data.id}</td>
+            <td>{if condition="$data.type==0"}主程序更新{else}sdk更新{/if}</td>
             <td>{$data.version}</td>
             <td>{$data.file_path}</td>
             <td class="td-manage">
