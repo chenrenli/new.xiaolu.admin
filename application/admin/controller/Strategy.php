@@ -11,6 +11,7 @@ use app\common\model\Ad;
 use app\common\model\AppAd;
 use app\common\model\Channel;
 use app\common\model\Position;
+use app\common\model\Sdk;
 use app\common\model\StrategyAd;
 use app\common\model\StrategyRule;
 use think\Validate;
@@ -67,10 +68,8 @@ class Strategy extends Base
 
             $validate = Validate::make([
                 'title' => "require",
-                'position_id' => 'require',
             ]);
             $data['title'] = $title;
-            $data['position_id'] = $position_id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -192,6 +191,15 @@ class Strategy extends Base
             //获取广告类型列表
             $position_list = Position::all();
             $ad_list = Ad::all(['status' => 1]);
+            if ($ad_list) {
+                foreach ($ad_list as &$ad) {
+                    $position = Position::find($ad->position_id);
+                    $sdk = Sdk::find($ad->sdk_id);
+                    if ($sdk) {
+                        $ad->title = $sdk->title . "-".$position->title."-" . $ad->title;
+                    }
+                }
+            }
             //获取渠道列表
             $channel_list = Channel::all();
             $this->assign("channel_list", $channel_list);
@@ -230,11 +238,9 @@ class Strategy extends Base
             $id = input("id");
             $validate = Validate::make([
                 'title' => "require",
-                'position_id' => 'require',
                 "id" => 'require',
             ]);
             $data['title'] = $title;
-            $data['position_id'] = $position_id;
             $data['id'] = $id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
@@ -246,16 +252,16 @@ class Strategy extends Base
             $data['create_time'] = time();
             $data['update_time'] = time();
             $map['id'] = $id;
-            $res = $strategyModel->addData($data, $map);
+            $res = $strategyModel->saveData($data, $map);
             if ($res) {
                 //添加关联数据
                 if ($ad_ids) {
-                    StrategyAd::destroy(['strategy_id' => $id]);
+                    StrategyAd::where(['strategy_id' => $id])->delete();
                     //添加广告数据
                     foreach ($ad_ids as $ad_id) {
                         $strategyAdModel = new StrategyAd();
                         $strategyAdModel->ad_id = $ad_id;
-                        $strategyAdModel->strategy_id = $strategyModel->id;
+                        $strategyAdModel->strategy_id = $id;
                         $strategyAdModel->save();
                     }
                 }
@@ -266,7 +272,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 1;
                     $strategyRuleModel->rule = $version_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = $version_content;
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -280,7 +286,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 2;
                     $strategyRuleModel->rule = $package_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = $package_content;
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -293,7 +299,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 3;
                     $strategyRuleModel->rule = $brand_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = $brand_content;
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -306,7 +312,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 4;
                     $strategyRuleModel->rule = $channel_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = implode(",", $channel_content);
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -319,7 +325,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 5;
                     $strategyRuleModel->rule = $phone_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = $phone_content;
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -331,7 +337,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 6;
                     $strategyRuleModel->rule = $net_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = implode(",", $net_content);
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -350,7 +356,7 @@ class Strategy extends Base
                     $strategyRuleModel = new StrategyRule();
                     $strategyRuleModel->type = 7;
                     $strategyRuleModel->rule = $date_type;
-                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->strategy_id = $id;
                     $strategyRuleModel->rule_content = $rule_content;
                     $strategyRuleModel->create_time = time();
                     $strategyRuleModel->update_time = time();
@@ -387,6 +393,8 @@ class Strategy extends Base
                         ];
                     }
                 }
+//                echo "<pre>";
+//                print_r($srule_arr);
                 //规则类型
                 $this->assign("rule_types", $rule_types);
                 $this->assign("srule_arr", $srule_arr);

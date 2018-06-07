@@ -27,11 +27,23 @@
             <div class="col-4"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-3">选择广告:</label>
+            <label class="form-label col-3">广告包名:</label>
             <div class="formControls col-5">
-                <select  id="ad_select" name="ad_id">
-
-                </select>
+                <input name="adpackagename"  value="{$app_ad.adpackagename}" class="input-text" type="text"/>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">appid:</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" name="appid"  value="{$app_ad.appid}"/>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">adid:</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" name="adid" value="{$app_ad.adid}"/>
             </div>
             <div class="col-4"></div>
         </div>

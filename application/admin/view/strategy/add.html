@@ -12,6 +12,7 @@
             </div>
             <div class="col-4"></div>
         </div>
+        <!--
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>广告类型：</label>
             <div class="formControls col-5">
@@ -24,6 +25,7 @@
             </div>
             <div class="col-4"></div>
         </div>
+        -->
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>权重：</label>
             <div class="formControls col-5">
@@ -150,7 +152,7 @@
                 </select>
             </div>
             <div class="formControls col-6">
-                <input type="text" name="start_time" class="text"/>
+                <input type="text" name="start_time" class="text" value=""/>
                 <select name="start_time_hour">
                     {php}
                     for($i=0;$i<24;$i++){
@@ -197,7 +199,8 @@
                     <option value="2">包含</option>
                 </select>
                 <select name="country">
-                    <option value="0">请选择</option>
+                    <option value="">请选择</option>
+                    <option value="CN">中国</option>
                 </select>
                 <label>省</label>
                 <select name="province_type">

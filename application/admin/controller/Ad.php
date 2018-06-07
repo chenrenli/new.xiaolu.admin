@@ -9,6 +9,7 @@ namespace app\admin\controller;
 
 use app\admin\controller\Base;
 use app\common\model\Position;
+use app\common\model\Sdk;
 use think\Config;
 use think\Validate;
 
@@ -23,9 +24,9 @@ class Ad extends Base
         $page = $list->render();
         $admin_list = $list->toArray();
         $admin_list = $admin_list['data'];
-        if($admin_list){
-            foreach($admin_list as &$val){
-                $val['position_title'] = Position::where("id",$val['position_id'])->value("title");
+        if ($admin_list) {
+            foreach ($admin_list as &$val) {
+                $val['position_title'] = Position::where("id", $val['position_id'])->value("title");
             }
         }
         $this->assign("total", $list->total());
@@ -44,16 +45,19 @@ class Ad extends Base
             $adid = input("adid");
             $status = input("status");
             $packagename = input("packagename");
+            $sdk_id = input("sdk_id");
             $validate = Validate::make([
                 'title' => "require",
                 'position_id' => "require",
                 "appid" => "require",
                 "adid" => "require",
+                "sdk_id" => "require",
             ]);
             $data['title'] = $title;
             $data['position_id'] = $position_id;
             $data['appid'] = $appid;
             $data['adid'] = $adid;
+            $data['sdk_id'] = $sdk_id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -71,6 +75,8 @@ class Ad extends Base
         } else {
             $position_list = Position::all(['status' => 1]);
             $this->assign("position_list", $position_list);
+            $sdk_list = Sdk::all();
+            $this->assign("sdk_list", $sdk_list);
             return $this->fetch();
         }
 
@@ -86,18 +92,21 @@ class Ad extends Base
             $adid = input("adid");
             $status = input("status");
             $packagename = input("packagename");
+            $sdk_id = input("sdk_id");
             $validate = Validate::make([
                 'title' => "require",
                 "id" => "require",
                 'position_id' => "require",
                 "appid" => "require",
                 "adid" => "require",
+                "sdk_id" => "require",
             ]);
             $data['title'] = $title;
             $data['id'] = $id;
             $data['position_id'] = $position_id;
             $data['appid'] = $appid;
             $data['adid'] = $adid;
+            $data['sdk_id'] = $sdk_id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -106,7 +115,7 @@ class Ad extends Base
             $sdk = new \app\common\model\Ad();
             $data['status'] = $status;
             $data['update_time'] = time();
-            $packagename = input("packagename");
+            $data['packagename'] = $packagename;
             $res = $sdk->saveData($data, $map);
             if ($res) {
                 return output_data([], 200, ["msg" => "编辑广告成功"]);
@@ -120,6 +129,8 @@ class Ad extends Base
             $this->assign("id", $id);
             $position_list = Position::all(['status' => 1]);
             $this->assign("position_list", $position_list);
+            $sdk_list = Sdk::all();
+            $this->assign("sdk_list", $sdk_list);
             return $this->fetch("edit");
         }
     }

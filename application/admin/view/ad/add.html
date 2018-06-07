@@ -15,6 +15,18 @@
             <div class="col-4"></div>
         </div>
         <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>请选择sdk：</label>
+            <div class="formControls col-5">
+                <select class="select-box" name="sdk_id">
+                    <option value="0">请选择</option>
+                    {volist name="sdk_list" id="sdk"}
+                    <option value="{$sdk.id}">{$sdk.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>广告名称：</label>
             <div class="formControls col-5">
                 <input type="text" class="input-text" value="" placeholder="" name="title" datatype="*2-200"
