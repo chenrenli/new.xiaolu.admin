@@ -30,6 +30,7 @@ class Ad extends Migrator
     {
         $sql = "create table `xl_ad`(
 id int(10) unsigned not null auto_increment PRIMARY key,
+title varchar(200) not null default '' comment'广告名称',
 position_id int(10) unsigned not null default 0 comment'广告类型ID',
 appid varchar(200) not null default '' comment'第三方appid',
 adid varchar(200) not null default '' comment'第三方adid',

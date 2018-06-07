@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 
+use app\common\model\Sdk;
 use think\Validate;
 
 class Update extends Base
@@ -34,13 +35,20 @@ class Update extends Base
         if ($this->request->isPost()) {
             $version = input("version");
             $file_path = input("file_path");
+            $sdk_id = input("sdk_id");
+            $key = input("key");
+            $type = input("type");
             $validate = Validate::make([
                 'version' => "require",
                 "file_path" => "require",
+                "key" => "require",
             ]);
             $data['version'] = $version;
             $data['ver'] = str_replace(".","",$version);
             $data['file_path'] = $file_path;
+            $data['sdk_id'] = $sdk_id;
+            $data['key'] = $key;
+            $data['type'] = $type;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -52,6 +60,9 @@ class Update extends Base
                 return output_error("添加更新信息失败");
             }
         } else {
+            //获取sdk列表
+            $sdkList = Sdk::where([])->select();
+            $this->assign("sdk_list",$sdkList);
             return $this->fetch();
         }
 
@@ -67,15 +78,24 @@ class Update extends Base
             $version = input("version");
             $file_path = input("file_path");
             $id = input("id");
+            $sdk_id = input("sdk_id");
+            $key = input("key");
+            $type = input("type");
             $validate = Validate::make([
                 'version' => "require",
                 "id" => "require",
                 "file_path" => "require",
+                "sdk_id" => "require",
+                "key" => "require",
+
             ]);
             $data['version'] = $version;
             $data['ver'] = str_replace(".","",$version);
             $data['file_path'] = $file_path;
             $data['id'] = $id;
+            $data['sdk_id'] = $sdk_id;
+            $data['key'] = $key;
+            $data['type'] = $type;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -91,6 +111,9 @@ class Update extends Base
         } else {
             $id = $this->request->param("id");
             $info = \app\common\model\Update::get($id);
+            //获取sdk列表
+            $sdkList = Sdk::where([])->select();
+            $this->assign("sdk_list",$sdkList);
             $this->assign("info", $info);
             $this->assign("id", $id);
             return $this->fetch("edit");

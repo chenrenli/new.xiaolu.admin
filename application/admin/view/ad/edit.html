@@ -1,0 +1,96 @@
+{include file="public/header" /}
+<body>
+<div class="pd-20">
+    <form action="{:url('admin/ad/edit')}" method="post" class="form form-horizontal" id="form-add">
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>广告类型：</label>
+            <div class="formControls col-5">
+                <select class="select-box" name="position_id">
+                    <option value="0">请选择</option>
+                    {volist name="position_list" id="position"}
+                    <option value="{$position.id}" {if condition="$info.position_id eq $position.id"}selected="selected"{/if}>{$position.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>广告名称：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$info.title}" placeholder="" name="title" datatype="*2-200"
+                       nullmsg="广告名称不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>包名：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$info.packagename}" placeholder="" name="packagename" />
+
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>appid：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$info.appid}" placeholder="" name="appid" datatype="*2-200"
+                       nullmsg="appid不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>adid：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$info.adid}" placeholder="" name="adid" datatype="*2-200"
+                       nullmsg="adid不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>状态：</label>
+            <div class="formControls col-5">
+                <label>开启</label><input type="radio" name="status" value="1" {if condition="$info.status eq 1"}checked="checked" {/if}/>
+                <label>关闭</label><input type="radio" name="status" value="0" {if condition="$info.status eq 0"}checked="checked" {/if}/>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-9 col-offset-3">
+                <input type="hidden" name="id" value="{$id}"/>
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript">
+    var url = "{$url}";
+    $("#form-add").Validform({
+        tiptype: 2,
+        callback: function (form) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#form-add").serializeArray(),
+                dataType: "json",
+                success: function (obj) {
+                    if (obj.code == 200) {
+                        /*
+                         var index = parent.layer.getFrameIndex(window.name);
+                         parent.$('.btn-refresh').click();
+                         parent.layer.close(index);
+                         */
+                        parent.location.reload(true);
+                    } else {
+                        alert(obj.msg);
+                    }
+
+                }
+            });
+            return false;
+        }
+    });
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\model\Ad;
 use app\common\model\AppAd;
 use app\common\model\Channel;
 use app\common\model\Position;
@@ -183,30 +184,32 @@ class App extends Base
             $adid = input("adid");
             $adpackagename = input("adpackagename");
             $id = input("id");
+            $ad_id = input("ad_id");
             $position_id = input("position_id");
             $validate = Validate::make([
                 "sdk_id" => "require",
-                "appid" => "require",
-                "adid" => "require",
                 "id" => "require",
-                "position_id" => "require",
+                "ad_id" => "require",
             ]);
+
+
             $data['sdk_id'] = $sdk_id;
             $data['position_id'] = $position_id;
-            $data['adid'] = $adid;
-            $data['appid'] = $appid;
             $data['id'] = $id;
-            $data['adpackagename'] = $adpackagename;
+            $data['ad_id'] = $ad_id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
             $data['app_id'] = $data['id'];
             unset($data['id']);
-            //查找是否添加重复
-            $app_ad = AppAd::where("position_id", $position_id)->where("app_id", $id)->find();
-            if ($app_ad) {
-                return output_error("同一包名存在相同的广告");
+            $adInfo = Ad::find($ad_id);
+            if (!$adInfo) {
+                return output_error("广告信息不存在");
             }
+            $data['adpackagename'] = $adInfo->packagename;
+            $data['appid'] = $adInfo->appid;
+            $data['adid'] = $adInfo->adid;
+
             $positionModel = new Position();
             $position = $positionModel->where("id", $position_id)->find();
             $sdkModel = new Sdk();
@@ -231,6 +234,7 @@ class App extends Base
             $this->assign("position_list", $position_list);
             $this->assign("sdk_list", $sdk_list);
             $this->assign("id", $id);
+
             return $this->fetch();
         }
     }
@@ -241,22 +245,19 @@ class App extends Base
             $sdk_id = input("sdk_id");
             $appid = input("appid");
             $adid = input("adid");
-            $adpackname = input("adpackagename","");
+            $adpackname = input("adpackagename", "");
             $id = input("id");
             $position_id = input("position_id");
+            $ad_id = input("ad_id");
             $validate = Validate::make([
                 "sdk_id" => "require",
-                "appid" => "require",
-                "adid" => "require",
                 "id" => "require",
                 "position_id" => "require",
             ]);
             $data['sdk_id'] = $sdk_id;
             $data['position_id'] = $position_id;
-            $data['adid'] = $adid;
-            $data['appid'] = $appid;
+            $data['ad_id'] = $ad_id;
             $data['id'] = $id;
-            $data['adpackagename'] = $adpackname;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -265,11 +266,15 @@ class App extends Base
             if (!$app_ad) {
                 return output_error("不存在广告sdk");
             }
-            $res = AppAd::where("position_id", $position_id)->whereNotIn("id", $id)->where("app_id",
-                $app_ad->app_id)->find();
-            if ($res) {
-                return output_error("已存在同一个广告");
+            $adInfo = Ad::find($ad_id);
+            if (!$adInfo) {
+                return output_error("广告信息不存在");
             }
+            $data['adpackagename'] = $adInfo->packagename;
+            $data['appid'] = $adInfo->appid;
+            $data['adid'] = $adInfo->adid;
+
+
             $positionModel = new Position();
             $position = $positionModel->where("id", $position_id)->find();
             $sdkModel = new Sdk();
@@ -317,5 +322,16 @@ class App extends Base
                 return output_error("删除数据失败", -400);
             }
         }
+    }
+
+    /**
+     * 获取广告列表
+     */
+    public function getAdList()
+    {
+        $position_id = input("position_id");
+        $ad_list = Ad::all(['position_id' => $position_id, 'status' => 1]);
+
+        return output_data($ad_list, 200, array("msg" => "获取广告数据成功"));
     }
 }

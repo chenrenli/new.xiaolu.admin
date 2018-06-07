@@ -1,4 +1,6 @@
 {include file="public/header" /}
+<link href="__STATIC__css/bootstrap-3.3.2.min.css" rel="stylesheet" type="text/css"/>
+<link href="__STATIC__css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <body>
 <div class="pd-20">
     <form action="{:url('admin/position/setAd')}" method="post" class="form form-horizontal" id="form-add">
@@ -17,7 +19,7 @@
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>广告类型：</label>
             <div class="formControls col-5">
-                <select class="select-box" name="position_id">
+                <select class="select-box" name="position_id" onchange="getAdList(this.value)">
                     <option value="0">请选择</option>
                     {volist name="position_list" id="position"}
                     <option value="{$position.id}">{$position.title}</option>
@@ -27,30 +29,14 @@
             <div class="col-4"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>广告包名：</label>
+            <label class="form-label col-3">选择广告:</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="" placeholder="" name="adpackagename"
-                       >
-            </div>
-            <div class="col-4"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>AppId：</label>
-            <div class="formControls col-5">
-                <input type="text" class="input-text" value="" placeholder="" name="appid" datatype="*2-200"
-                       nullmsg="appID 不能为空">
-            </div>
-            <div class="col-4"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>广告位ID：</label>
-            <div class="formControls col-5">
-                <input type="text" class="input-text" value="" placeholder="" name="adid" datatype="*2-200"
-                       nullmsg="广告位ID不能为空">
-            </div>
-            <div class="col-4"></div>
-        </div>
+                <select  id="ad_select" name="ad_id">
 
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
 
         <div class="row cl">
             <div class="col-9 col-offset-3">
@@ -61,6 +47,8 @@
     </form>
 </div>
 {include file="public/footer" /}
+<script type="text/javascript" src="__STATIC__js/bootstrap-3.3.2.min.js"></script>
+<script type="text/javascript" src="__STATIC__js/bootstrap-multiselect.js"></script>
 <script type="text/javascript">
     var url = "{$url}";
     $("#form-add").Validform({
@@ -88,6 +76,29 @@
             return false;
         }
     });
+
+    var position_id = $("select[name='position_id']").val();
+    getAdList(position_id);
+    function getAdList(position_id) {
+        $.ajax({
+            type: "POST",
+            url: "{:url('admin/app/getAdList')}",
+            data: {"position_id": position_id},
+            dataType: "json",
+            success: function (obj) {
+                if (obj.code == 200) {
+                    var datas = obj.data;
+                    var html = '';
+                    for (var i = 0; i < datas.length; i++) {
+                        html += '<option value="' + datas[i]['id'] + '">' + datas[i]['title'] + '</option>';
+                    }
+                    $("#ad_select").html(html);
+
+
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>

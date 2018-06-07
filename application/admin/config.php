@@ -61,6 +61,19 @@ $menu = array(
             ),
         ),
         array(
+            'name' => "ad",
+            'title' => "广告管理",
+            'child' => array(
+                array(
+                    'name' => "ad",
+                    'title' => "广告管理",
+                    'controller' => 'ad',
+                    'action' => 'index',
+                ),
+
+            ),
+        ),
+        array(
             'name' => "position",
             'title' => "广告类型",
             'child' => array(

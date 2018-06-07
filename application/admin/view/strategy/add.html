@@ -1,16 +1,223 @@
 {include file="public/header" /}
+<link href="__STATIC__css/bootstrap-3.3.2.min.css" rel="stylesheet" type="text/css"/>
+<link href="__STATIC__css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <body>
 <div class="pd-20">
     <form action="{:url('admin/channel/add')}" method="post" class="form form-horizontal" id="form-add">
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>渠道名称：</label>
+            <label class="form-label col-3"><span class="c-red">*</span>名称：</label>
             <div class="formControls col-5">
                 <input type="text" class="input-text" value="" placeholder="" name="title" datatype="*2-200"
                        nullmsg="名称不能为空">
             </div>
             <div class="col-4"></div>
         </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>广告类型：</label>
+            <div class="formControls col-5">
+                <select name="position_id" class="select-box">
+                    <option value="0">请选择</option>
+                    {volist name="position_list" id="position"}
+                    <option value="{$position.id}">{$position.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>权重：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="" placeholder="" name="weight"/>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>状态：</label>
+            <div class="formControls col-5">
+                <label>开启</label><input type="radio" name="status" value="1" checked="checked"/>
+                <label>关闭</label><input type="radio" name="status" value="0">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row c1" style="border-top: 1px dotted #ccc;">广告</div>
+        <div class="row cl">
+            <label class="form-label col-3">添加广告</label>
+            <div class="formControls col-5">
+                <select multiple="multiple" id="ad_select" name="ad_ids[]">
+                    {volist name="ad_list" id="ad"}
+                    <option value="{$ad.id}">{$ad.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl" style="border-top: 1px dotted #ccc;">
+            投放策略
 
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">
+                <a onclick="addRule();">添加筛选条件</a>
+            </label>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">版本号</label>
+            <div class="formControls col-2">
+                <select class="select-box" name="version_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                    <option value="3">大于等于</option>
+                    <option value="4">小于等于</option>
+                </select>
+            </div>
+            <div class="formControls col-3">
+                <textarea class="textarea" name="version_content"></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">包名:</label>
+            <div class="formControls col-2">
+                <select class="select-box" name="package_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+            </div>
+            <div class="formControls col-3">
+                <textarea class="textarea" name="package_content"></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">手机品牌:</label>
+            <div class="formControls col-2">
+                <select class="select-box" name="brand_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+            </div>
+            <div class="formControls col-3">
+                <textarea class="textarea" name="brand_content"></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">渠道:</label>
+            <div class="formControls col-2">
+                <select class="select-box" name="channel_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+            </div>
+            <div class="formControls col-3">
+                <select name="channel_content[]" multiple="multiple" id="channel_container">
+                    {volist name="channel_list" id="channel"}
+                    <option value="{$channel.id}">{$channel.title}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">运营商:</label>
+            <div class="formControls col-2">
+                <select class="select-box" name="phone_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+            </div>
+            <div class="formControls col-3">
+                <textarea class="textarea" name="phone_content"></textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">网络:</label>
+            <div class="formControls col-2">
+                <select class="select-box" name="net_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+            </div>
+            <div class="formControls col-3">
+                <select name="net_content[]" multiple="multiple" id="net_container">
+                    <option value="1">wifi</option>
+                    <option value="2">数据网络</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">日期:</label>
+
+            <div class="formControls col-1">
+                <select class="select-box" name="date_type">
+                    <option value="1">包含</option>
+                </select>
+            </div>
+            <div class="formControls col-6">
+                <input type="text" name="start_time" class="text"/>
+                <select name="start_time_hour">
+                    {php}
+                    for($i=0;$i<24;$i++){
+                    if($i<10){
+                    echo '
+                    <option value="0'.$i.'">0'.$i.'</option>
+                    ';
+                    }else{
+                    echo '
+                    <option value="'.$i.'">'.$i.'</option>
+                    ';
+                    }
+
+                    }
+                    {/php}
+                </select>
+                <input type="text" name="end_time"/>
+                <select name="end_time_hour">
+                    {php}
+                    for($i=0;$i<24;$i++){
+                    if($i<10){
+                    echo '
+                    <option value="0'.$i.'">0'.$i.'</option>
+                    ';
+                    }else{
+                    echo '
+                    <option value="'.$i.'">'.$i.'</option>
+                    ';
+                    }
+
+                    }
+                    {/php}
+                </select>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3">地区:</label>
+
+            <div class="formControls col-7">
+                <label>国</label>
+                <select name="country_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+                <select name="country">
+                    <option value="0">请选择</option>
+                </select>
+                <label>省</label>
+                <select name="province_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+                <select name="province">
+                    <option value="0">请选择</option>
+                </select>
+                <label>市</label>
+                <select name="city_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+                <select name="city">
+                    <option value="0">请选择</option>
+                </select>
+
+            </div>
+        </div>
 
         <div class="row cl">
             <div class="col-9 col-offset-3">
@@ -20,6 +227,8 @@
     </form>
 </div>
 {include file="public/footer" /}
+<script type="text/javascript" src="__STATIC__js/bootstrap-3.3.2.min.js"></script>
+<script type="text/javascript" src="__STATIC__js/bootstrap-multiselect.js"></script>
 <script type="text/javascript">
     var url = "{$url}";
     $("#form-add").Validform({
@@ -47,6 +256,22 @@
             return false;
         }
     });
+    function addRule() {
+        var url = ""
+        layer.open({
+            type: 2,
+            area: [300 + 'px', 200 + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shade: 0.4,
+            content: url
+        });
+    }
+
+
+    $('#ad_select').multiselect();
+    $('#net_container').multiselect();
+    $('#channel_container').multiselect();
 </script>
 </body>
 </html>

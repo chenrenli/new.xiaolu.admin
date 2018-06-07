@@ -27,26 +27,11 @@
             <div class="col-4"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>广告包名：</label>
+            <label class="form-label col-3">选择广告:</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="{$app_ad.adpackagename}" placeholder="" name="adpackagename"
-                       >
-            </div>
-            <div class="col-4"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>AppId：</label>
-            <div class="formControls col-5">
-                <input type="text" class="input-text" value="{$app_ad.appid}" placeholder="" name="appid" datatype="*2-200"
-                       nullmsg="app不能为空">
-            </div>
-            <div class="col-4"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>广告位ID：</label>
-            <div class="formControls col-5">
-                <input type="text" class="input-text" value="{$app_ad.adid}" placeholder="" name="adid" datatype="*2-200"
-                       nullmsg="广告位ID不能为空">
+                <select  id="ad_select" name="ad_id">
+
+                </select>
             </div>
             <div class="col-4"></div>
         </div>
@@ -88,6 +73,34 @@
             return false;
         }
     });
+    var position_id = $("select[name='position_id']").val();
+    var ad_id = "{$app_ad.ad_id}";
+    getAdList(position_id);
+    function getAdList(position_id) {
+        $.ajax({
+            type: "POST",
+            url: "{:url('admin/app/getAdList')}",
+            data: {"position_id": position_id},
+            dataType: "json",
+            success: function (obj) {
+                if (obj.code == 200) {
+                    var datas = obj.data;
+                    var html = '';
+                    for (var i = 0; i < datas.length; i++) {
+                        if(datas[i]['id']==ad_id){
+                            html += '<option value="' + datas[i]['id'] + '" selected="selected">' + datas[i]['title'] + '</option>';
+                        }else{
+                            html += '<option value="' + datas[i]['id'] + '">' + datas[i]['title'] + '</option>';
+                        }
+
+                    }
+                    $("#ad_select").html(html);
+
+
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -1,27 +1,28 @@
 ﻿{include file="public/header" /}
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
-    <span class="c-gray en">&gt;</span> 策略管理 <span class="c-gray en">&gt;</span> 策略列表 <a
+    <span class="c-gray en">&gt;</span> 广告管理 <span class="c-gray en">&gt;</span> 广告列表 <a
             class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px"
             href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 
     <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
         <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-        <a href="javascript:;" onclick="addStrategy('添加策略','{:url('admin/strategy/add')}','800','400')"
-           class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加策略</a></span> <span
+        <a href="javascript:;" onclick="add('添加广告','{:url('admin/ad/add')}','800','500')"
+           class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加广告</a></span> <span
             class="r">共有数据：<strong>{$total}</strong> 条</span></div>
     <table class="table table-border table-bordered table-bg">
         <thead>
         <tr>
-            <th scope="col" colspan="9">策略列表</th>
+            <th scope="col" colspan="9">广告列表</th>
         </tr>
         <tr class="text-c">
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
-            <th width="150">策略名称</th>
-            <th width="100">广告类型</th>
-            <th width="100">状态</th>
+            <th width="100">广告位置</th>
+            <th width="150">广告名称</th>
+            <th width="150">appid</th>
+            <th width="150">adid</th>
             <th width="100">操作</th>
         </tr>
         </thead>
@@ -30,12 +31,14 @@
         <tr class="text-c">
             <td><input type="checkbox" value="{$data.id}" name="ids[]"></td>
             <td>{$data.id}</td>
+            <td>{$data.position_title}</td>
             <td>{$data.title}</td>
-            <td></td>
-            <td>{if condition="$data.status eq 1"}开启{else}关闭{/if}</td>
+            <td>{$data.appid}</td>
+            <td>{$data.adid}</td>
+
             <td class="td-manage">
                 <a title="编辑" href="javascript:;"
-                   onclick="edit('策略编辑','{:url('admin/strategy/edit',array('id'=>$data['id']))}','1','900','500')"
+                   onclick="edit('广告编辑','{:url('admin/ad/edit',array('id'=>$data['id']))}','1','800','500')"
                    class="ml-5" style="text-decoration:none">
                     <i class="Hui-iconfont">&#xe6df;</i></a>
                 <a title="删除" href="javascript:;" onclick="del(this,'{$data.id}')" class="ml-5"
@@ -48,18 +51,7 @@
 {include file="public/footer" /}
 <script type="text/javascript">
 
-    function addStrategy(title, url, w, h) {
-        var index = layer.open({
-            type: 2,
-            area: [w + 'px', h + 'px'],
-            fix: false, //不固定
-            maxmin: true,
-            shade: 0.4,
-            title: title,
-            content: url
-        });
-        layer.full(index);
-    }
+
     /*密码-修改*/
     function change_password(title, url, id, w, h) {
         layer_show(title, url, w, h);
@@ -69,7 +61,7 @@
         layer.confirm('确认要删除吗？', function (index) {
             $.ajax({
                 type: "post",
-                url: "{:url('strategy/delete')}",
+                url: "{:url('ad/delete')}",
                 data: {"id": id},
                 dataType: "json",
                 success: function (obj) {
@@ -102,7 +94,7 @@
             return false;
         }
         ids = ids.substr(0, ids.length - 1);
-        var url = "{:url('strategy/delete')}";
+        var url = "{:url('ad/delete')}";
 
         layer.confirm('确认要删除吗？', function (index) {
             //此处请求后台程序，下方是成功后的前台处理……

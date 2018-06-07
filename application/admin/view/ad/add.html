@@ -1,50 +1,56 @@
 {include file="public/header" /}
 <body>
 <div class="pd-20">
-    <form action="{:url('admin/update/add')}" method="post" class="form form-horizontal" id="form-add">
+    <form action="{:url('admin/channel/add')}" method="post" class="form form-horizontal" id="form-add">
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>类型：</label>
+            <label class="form-label col-3"><span class="c-red">*</span>广告类型：</label>
             <div class="formControls col-5">
-                <select name="type" class="select-box" onchange="selectType(this);">
-                    <option value="0">主程序更新信息</option>
-                    <option value="1">sdk更新信息</option>
-                </select>
-            </div>
-            <div class="col-4"></div>
-        </div>
-        <div class="row cl" id="sdk_container" style="display: none;">
-            <label class="form-label col-3"><span class="c-red">*</span>请选择sdk：</label>
-            <div class="formControls col-5">
-                <select name="sdk_id" class="select-box">
+                <select class="select-box" name="position_id">
                     <option value="0">请选择</option>
-                    {volist name="sdk_list" id="sdk"}
-                    <option value="{$sdk.id}">{$sdk.title}</option>
+                    {volist name="position_list" id="position"}
+                       <option value="{$position.id}">{$position.title}</option>
                     {/volist}
                 </select>
             </div>
             <div class="col-4"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>版本号：</label>
+            <label class="form-label col-3"><span class="c-red">*</span>广告名称：</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="" placeholder="" name="version" datatype="*2-200"
-                       nullmsg="名称不能为空">
+                <input type="text" class="input-text" value="" placeholder="" name="title" datatype="*2-200"
+                       nullmsg="广告名称不能为空">
             </div>
             <div class="col-4"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>秘钥：</label>
+            <label class="form-label col-3"><span class="c-red">*</span>包名：</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="" placeholder="" name="key" datatype="*2-200"
-                       nullmsg="名称不能为空">
+                <input type="text" class="input-text" value="" placeholder="" name="packagename" />
+
             </div>
             <div class="col-4"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-3"><span class="c-red">*</span>文件路径：</label>
+            <label class="form-label col-3"><span class="c-red">*</span>appid：</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="" placeholder="" name="file_path" datatype="*2-2000"
-                       nullmsg="名称不能为空">
+                <input type="text" class="input-text" value="" placeholder="" name="appid" datatype="*2-200"
+                       nullmsg="appid不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>adid：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="" placeholder="" name="adid" datatype="*2-200"
+                       nullmsg="adid不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>状态：</label>
+            <div class="formControls col-5">
+                <label>开启</label><input type="radio" name="status" value="1" checked="checked"/>
+                <label>关闭</label><input type="radio" name="status" value="0"/>
             </div>
             <div class="col-4"></div>
         </div>
@@ -85,15 +91,6 @@
             return false;
         }
     });
-
-    function selectType(obj) {
-        var type = $(obj).val();
-        if (type == 1) {
-            $("#sdk_container").css("display", "block");
-        } else {
-            $("#sdk_container").css("display", "none");
-        }
-    }
 </script>
 </body>
 </html>

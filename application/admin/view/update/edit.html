@@ -3,10 +3,31 @@
 <div class="pd-20">
     <form action="{:url('admin/update/edit')}" method="post" class="form form-horizontal" id="form-add">
         <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>请选择sdk：</label>
+            <div class="formControls col-5">
+                <select name="sdk_id" class="select-box">
+                    <option value="0">请选择</option>
+                    {volist name="sdk_list" id="sdk"}
+                    <option value="{$sdk.id}" {if condition="$sdk.id eq $info.sdk_id" }selected="selected" {
+                    /if}>{$sdk.title}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>版本号：</label>
             <div class="formControls col-5">
                 <input type="text" class="input-text" value="{$info.version}" placeholder="" name="version"
                        datatype="*2-200"
+                       nullmsg="名称不能为空">
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>秘钥：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="{$info.key}" placeholder="" name="key" datatype="*2-200"
                        nullmsg="名称不能为空">
             </div>
             <div class="col-4"></div>
