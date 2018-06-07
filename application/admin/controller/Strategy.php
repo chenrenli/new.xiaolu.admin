@@ -196,7 +196,7 @@ class Strategy extends Base
                     $position = Position::find($ad->position_id);
                     $sdk = Sdk::find($ad->sdk_id);
                     if ($sdk) {
-                        $ad->title = $sdk->title . "-".$position->title."-" . $ad->title;
+                        $ad->title = $sdk->title . "-" . $position->title . "-" . $ad->title;
                     }
                 }
             }
@@ -423,7 +423,8 @@ class Strategy extends Base
             $map['id'] = array("in", $id);
             $result = \app\common\model\Strategy::destroy($map);
             if ($result) {
-
+                StrategyRule::destroy(["strategy_id" => $id]);
+                StrategyAd::destroy(["strategy_id" => $id]);
                 return output_data(array(), 200, array("msg" => "删除数据成功"));
             } else {
                 return output_error("删除数据失败", -400);
