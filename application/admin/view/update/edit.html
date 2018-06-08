@@ -3,13 +3,35 @@
 <div class="pd-20">
     <form action="{:url('admin/update/edit')}" method="post" class="form form-horizontal" id="form-add">
         <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>类型：</label>
+            <div class="formControls col-5">
+                <select name="type" class="select-box" onchange="selectType(this);">
+                    <option value="0" {if condition="$info.type eq 0"}selected="selected"{/if}>主程序更新信息</option>
+                    <option value="1" {if condition="$info.type eq 1"}selected="selected"{/if}>sdk更新信息</option>
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row cl" id="app_container" {if condition="$info.type eq 1"}style="display: none;" {/if}>
+            <label class="form-label col-3"><span class="c-red">*</span>请选择应用：</label>
+            <div class="formControls col-5">
+                <select name="app_id" class="select-box">
+                    <option value="0">请选择</option>
+                    {volist name="app_list" id="app"}
+                    <option value="{$app.id}" {if condition="$info.app_id eq $app.id"}selected="selected"{/if}>{$app.gamename}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <div class="row cl" id="sdk_container" {if condition="$info.type eq 0"}style="display: none;" {/if}>
             <label class="form-label col-3"><span class="c-red">*</span>请选择sdk：</label>
             <div class="formControls col-5">
                 <select name="sdk_id" class="select-box">
                     <option value="0">请选择</option>
                     {volist name="sdk_list" id="sdk"}
-                    <option value="{$sdk.id}" {if condition="$sdk.id eq $info.sdk_id" }selected="selected" {
-                    /if}>{$sdk.title}</option>
+                    <option value="{$sdk.id}" {if condition="$info.sdk_id eq $sdk.id"}selected="selected"{/if}>{$sdk.title}</option>
                     {/volist}
                 </select>
             </div>
@@ -18,8 +40,7 @@
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>版本号：</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="{$info.version}" placeholder="" name="version"
-                       datatype="*2-200"
+                <input type="text" class="input-text" value="{$info.version}" placeholder="" name="version" datatype="*2-200"
                        nullmsg="名称不能为空">
             </div>
             <div class="col-4"></div>
@@ -35,16 +56,16 @@
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>文件路径：</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="{$info.file_path}" placeholder="" name="file_path"
-                       datatype="*2-2000"
+                <input type="text" class="input-text" value="{$info.file_path}" placeholder="" name="file_path" datatype="*2-2000"
                        nullmsg="名称不能为空">
             </div>
             <div class="col-4"></div>
         </div>
 
+
         <div class="row cl">
             <div class="col-9 col-offset-3">
-                <input type="hidden" name="id" value="{$id}"/>
+                <input type="hidden" name="id" value="{$info.id}"/>
                 <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
             </div>
         </div>
@@ -78,6 +99,17 @@
             return false;
         }
     });
+
+    function selectType(obj) {
+        var type = $(obj).val();
+        if (type == 1) {
+            $("#sdk_container").css("display", "block");
+            $("#app_container").css("display","none");
+        } else {
+            $("#sdk_container").css("display", "none");
+            $("#app_container").css("display","block");
+        }
+    }
 </script>
 </body>
 </html>

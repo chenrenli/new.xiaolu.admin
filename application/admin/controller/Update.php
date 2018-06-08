@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 
+use app\common\model\App;
 use app\common\model\Sdk;
 use think\Validate;
 
@@ -38,6 +39,7 @@ class Update extends Base
             $sdk_id = input("sdk_id");
             $key = input("key");
             $type = input("type");
+            $app_id = input("app_id");
             $validate = Validate::make([
                 'version' => "require",
                 "file_path" => "require",
@@ -50,6 +52,7 @@ class Update extends Base
             $data['sdk_id'] = $sdk_id;
             $data['key'] = $key;
             $data['type'] = $type;
+            $data['app_id'] = $app_id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -64,6 +67,8 @@ class Update extends Base
             //获取sdk列表
             $sdkList = Sdk::where([])->select();
             $this->assign("sdk_list", $sdkList);
+            $app_list = App::where(['status' => 1])->select();
+            $this->assign("app_list", $app_list);
             return $this->fetch();
         }
 
@@ -82,6 +87,7 @@ class Update extends Base
             $sdk_id = input("sdk_id");
             $key = input("key");
             $type = input("type");
+            $app_id = input("app_id");
             $validate = Validate::make([
                 'version' => "require",
                 "id" => "require",
@@ -98,6 +104,7 @@ class Update extends Base
             $data['sdk_id'] = $sdk_id;
             $data['key'] = $key;
             $data['type'] = $type;
+            $data['app_id'] = $app_id;
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -118,6 +125,8 @@ class Update extends Base
             $this->assign("sdk_list", $sdkList);
             $this->assign("info", $info);
             $this->assign("id", $id);
+            $app_list = App::where(['status' => 1])->select();
+            $this->assign("app_list", $app_list);
             return $this->fetch("edit");
         }
     }
