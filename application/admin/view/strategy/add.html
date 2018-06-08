@@ -63,6 +63,47 @@
             </label>
         </div>
         <div class="row cl">
+            <label class="form-label col-3">地区:</label>
+
+            <div class="formControls col-7">
+                <label>国</label>
+                <select name="country_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+                <select name="country[]" id="country_container" multiple="multiple">
+                    <option value="">请选择</option>
+                    <option value="中国">中国</option>
+                </select>
+                <label>省</label>
+                <select name="province_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+                <select name="province[]" id="province_container" multiple="multiple">
+                    <option value="0">请选择</option>
+                    {volist name="province_list" id="province"}
+                    <option value="{$province.name}">{$province.name}</option>
+                    {/volist}
+                </select>
+                <label>市</label>
+                <select name="city_type">
+                    <option value="1">不包含</option>
+                    <option value="2">包含</option>
+                </select>
+                <select name="city[]" id="city_container" multiple="multiple">
+                    <option value="0">请选择</option>
+                    {volist name="city_list" id="city"}
+                    <option value="{$city.name}">{$city.name}</option>
+                    {/volist}
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="row cl">
             <label class="form-label col-3">版本号</label>
             <div class="formControls col-2">
                 <select class="select-box" name="version_type">
@@ -188,40 +229,6 @@
                 </select>
             </div>
         </div>
-        <!--
-        <div class="row cl">
-            <label class="form-label col-3">地区:</label>
-
-            <div class="formControls col-7">
-                <label>国</label>
-                <select name="country_type">
-                    <option value="1">不包含</option>
-                    <option value="2">包含</option>
-                </select>
-                <select name="country">
-                    <option value="">请选择</option>
-                    <option value="CN">中国</option>
-                </select>
-                <label>省</label>
-                <select name="province_type">
-                    <option value="1">不包含</option>
-                    <option value="2">包含</option>
-                </select>
-                <select name="province">
-                    <option value="0">请选择</option>
-                </select>
-                <label>市</label>
-                <select name="city_type">
-                    <option value="1">不包含</option>
-                    <option value="2">包含</option>
-                </select>
-                <select name="city">
-                    <option value="0">请选择</option>
-                </select>
-
-            </div>
-            -->
-        </div>
 
         <div class="row cl">
             <div class="col-9 col-offset-3">
@@ -276,6 +283,10 @@
     $('#ad_select').multiselect();
     $('#net_container').multiselect();
     $('#channel_container').multiselect();
+    $('#country_container').multiselect();
+    $('#province_container').multiselect();
+    $('#city_container').multiselect();
+
 </script>
 </body>
 </html>

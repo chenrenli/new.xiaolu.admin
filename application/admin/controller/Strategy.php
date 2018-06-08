@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use app\common\model\Ad;
 use app\common\model\AppAd;
 use app\common\model\Channel;
+use app\common\model\Country;
 use app\common\model\Position;
 use app\common\model\Sdk;
 use app\common\model\StrategyAd;
@@ -65,6 +66,12 @@ class Strategy extends Base
             $start_time_hour = input("start_time_hour");
             $end_time = input("end_time");
             $end_time_hour = input("end_time_hour");
+            $country = $_POST['country'];
+            $country_type = input("country_type");
+            $province = $_POST["province"];
+            $province_type = input("province_type");
+            $city = $_POST["city"];
+            $city_type = input("city_type");
 
             $validate = Validate::make([
                 'title' => "require",
@@ -182,7 +189,42 @@ class Strategy extends Base
 
                 }
                 //地区
+                if ($country && count($country) >= 1) {
+                    //国家
+                    $strategyRuleModel = new StrategyRule();
+                    $strategyRuleModel->type = 8;
+                    $strategyRuleModel->rule = $country_type;
+                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->rule_content = implode(",", $country);
+                    $strategyRuleModel->create_time = time();
+                    $strategyRuleModel->update_time = time();
+                    $strategyRuleModel->save();
 
+                }
+                if ($province && count($province) >= 1) {
+                    //省
+                    $strategyRuleModel = new StrategyRule();
+                    $strategyRuleModel->type = 9;
+                    $strategyRuleModel->rule = $province_type;
+                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->rule_content = implode(",", $province);
+                    $strategyRuleModel->create_time = time();
+                    $strategyRuleModel->update_time = time();
+                    $strategyRuleModel->save();
+
+                }
+                if ($city && count($city) >= 1) {
+                    //城市
+                    $strategyRuleModel = new StrategyRule();
+                    $strategyRuleModel->type = 10;
+                    $strategyRuleModel->rule = $city_type;
+                    $strategyRuleModel->strategy_id = $strategyModel->id;
+                    $strategyRuleModel->rule_content = implode(",", $city);
+                    $strategyRuleModel->create_time = time();
+                    $strategyRuleModel->update_time = time();
+                    $strategyRuleModel->save();
+
+                }
                 return output_data([], 200, ["msg" => "添加策略成功"]);
             } else {
                 return output_error("添加策略失败");
@@ -205,6 +247,13 @@ class Strategy extends Base
             $this->assign("channel_list", $channel_list);
             $this->assign("ad_list", $ad_list);
             $this->assign("position_list", $position_list);
+            //获取地区列表
+            $province_list = Country::where("pid", 0)->select();
+            $this->assign("province_list", $province_list);
+
+            $city_list = Country::where("pid", ">", 0)->select();
+            $this->assign("city_list", $city_list);
+
             return $this->fetch();
         }
 
@@ -235,7 +284,16 @@ class Strategy extends Base
             $start_time_hour = input("start_time_hour");
             $end_time = input("end_time");
             $end_time_hour = input("end_time_hour");
+            $country = $_POST['country'];
+            $country_type = input("country_type");
+            $province = $_POST["province"];
+            $province_type = input("province_type");
+            $city = $_POST["city"];
+            $city_type = input("city_type");
+
             $id = input("id");
+
+
             $validate = Validate::make([
                 'title' => "require",
                 "id" => 'require',
@@ -364,6 +422,45 @@ class Strategy extends Base
 
                 }
                 //地区
+                if ($country && count($country) >= 1) {
+                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 8]);
+                    //国家
+                    $strategyRuleModel = new StrategyRule();
+                    $strategyRuleModel->type = 8;
+                    $strategyRuleModel->rule = $country_type;
+                    $strategyRuleModel->strategy_id = $id;
+                    $strategyRuleModel->rule_content = implode(",", $country);
+                    $strategyRuleModel->create_time = time();
+                    $strategyRuleModel->update_time = time();
+                    $strategyRuleModel->save();
+
+                }
+                if ($province && count($province) >= 1) {
+                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 9]);
+                    //省
+                    $strategyRuleModel = new StrategyRule();
+                    $strategyRuleModel->type = 9;
+                    $strategyRuleModel->rule = $province_type;
+                    $strategyRuleModel->strategy_id = $id;
+                    $strategyRuleModel->rule_content = implode(",", $province);
+                    $strategyRuleModel->create_time = time();
+                    $strategyRuleModel->update_time = time();
+                    $strategyRuleModel->save();
+
+                }
+                if ($city && count($city) >= 1) {
+                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 10]);
+                    //城市
+                    $strategyRuleModel = new StrategyRule();
+                    $strategyRuleModel->type = 10;
+                    $strategyRuleModel->rule = $city_type;
+                    $strategyRuleModel->strategy_id = $id;
+                    $strategyRuleModel->rule_content = implode(",", $city);
+                    $strategyRuleModel->create_time = time();
+                    $strategyRuleModel->update_time = time();
+                    $strategyRuleModel->save();
+
+                }
 
                 return output_data([], 200, ["msg" => "添加策略成功"]);
             } else {
@@ -415,6 +512,13 @@ class Strategy extends Base
             //获取渠道列表
             $channel_list = Channel::all();
             $this->assign("channel_list", $channel_list);
+            //获取地区列表
+            $province_list = Country::where("pid", 0)->select();
+            $this->assign("province_list", $province_list);
+
+            $city_list = Country::where("pid", ">", 0)->select();
+            $this->assign("city_list", $city_list);
+
             $this->assign("ad_list", $ad_list);
             $this->assign("position_list", $position_list);
             $this->assign("info", $info);

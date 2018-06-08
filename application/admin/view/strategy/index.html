@@ -20,6 +20,7 @@
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
             <th width="150">策略名称</th>
+            <th width="100">权重</th>
             <th width="100">状态</th>
             <th width="100">操作</th>
         </tr>
@@ -30,10 +31,11 @@
             <td><input type="checkbox" value="{$data.id}" name="ids[]"></td>
             <td>{$data.id}</td>
             <td>{$data.title}</td>
+            <td>{$data.weight}</td>
             <td>{if condition="$data.status eq 1"}开启{else}关闭{/if}</td>
             <td class="td-manage">
                 <a title="编辑" href="javascript:;"
-                   onclick="edit('策略编辑','{:url('admin/strategy/edit',array('id'=>$data['id']))}','1','900','500')"
+                   onclick="editStrategy('策略编辑','{:url('admin/strategy/edit',array('id'=>$data['id']))}','900','500')"
                    class="ml-5" style="text-decoration:none">
                     <i class="Hui-iconfont">&#xe6df;</i></a>
                 <a title="删除" href="javascript:;" onclick="del(this,'{$data.id}')" class="ml-5"
@@ -58,6 +60,20 @@
         });
         layer.full(index);
     }
+
+    function editStrategy(title, url, w, h) {
+        var index = layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shade: 0.4,
+            title: title,
+            content: url
+        });
+        layer.full(index);
+    }
+
     /*密码-修改*/
     function change_password(title, url, id, w, h) {
         layer_show(title, url, w, h);

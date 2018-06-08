@@ -7,7 +7,8 @@
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>名称：</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" value="{$info.title}" placeholder="" name="title" datatype="*2-200"
+                <input type="text" class="input-text" value="{$info.title}" placeholder="" name="title"
+                       datatype="*2-200"
                        nullmsg="名称不能为空">
             </div>
             <div class="col-4"></div>
@@ -36,8 +37,10 @@
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>状态：</label>
             <div class="formControls col-5">
-                <label>开启</label><input type="radio" name="status" value="1" {if condition="$info.status eq 1"}checked="checked" {/if}/>
-                <label>关闭</label><input type="radio" name="status" value="0" {if condition="$info.status eq 0"}checked="checked" {/if}>
+                <label>开启</label><input type="radio" name="status" value="1" {if condition="$info.status eq 1"
+                                        }checked="checked" {/if}/>
+                <label>关闭</label><input type="radio" name="status" value="0" {if condition="$info.status eq 0"
+                                        }checked="checked" {/if}>
             </div>
             <div class="col-4"></div>
         </div>
@@ -47,7 +50,8 @@
             <div class="formControls col-5">
                 <select multiple="multiple" id="ad_select" name="ad_ids[]">
                     {volist name="ad_list" id="ad"}
-                    <option value="{$ad.id}"  {php}if(in_array($ad['id'],$strategyadids))echo 'selected="selected"';{/php}>{$ad.title}</option>
+                    <option value="{$ad.id}" {php}if(in_array($ad[
+                    'id'],$strategyadids))echo 'selected="selected"';{/php}>{$ad.title}</option>
                     {/volist}
                 </select>
             </div>
@@ -61,14 +65,85 @@
                 <a onclick="addRule();">添加筛选条件</a>
             </label>
         </div>
+
+        <div class="row cl">
+            <label class="form-label col-3">地区:</label>
+
+            <div class="formControls col-7">
+                {php}
+                $countrys = [];
+                $provinces = [];
+                $citys = [];
+                if(isset($srule_arr[8])){
+                $rule_content = $srule_arr[8]['rule_content'];
+                $countrys = explode(",",$rule_content);
+                }
+                if(isset($srule_arr[9])){
+                $rule_content = $srule_arr[9]['rule_content'];
+                $provinces = explode(",",$rule_content);
+                }
+                if(isset($srule_arr[10])){
+                $rule_content = $srule_arr[10]['rule_content'];
+                $citys = explode(",",$rule_content);
+                }
+                {/php}
+                <label>国</label>
+                <select name="country_type">
+                    <option value="1" {php}if(isset($srule_arr[8])&& $srule_arr[8][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[8])&& $srule_arr[8][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                </select>
+                <select name="country[]" id="country_container" multiple="multiple">
+                    <option value="">请选择</option>
+                    <option value="中国" {php}if(in_array(
+                    "中国",$countrys))echo 'selected="selected"';{/php}>中国</option>
+                </select>
+                <label>省</label>
+                <select name="province_type">
+                    <option value="1" {php}if(isset($srule_arr[9])&& $srule_arr[9][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[9])&& $srule_arr[9][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                </select>
+                <select name="province[]" id="province_container" multiple="multiple">
+                    <option value="0">请选择</option>
+                    {volist name="province_list" id="province"}
+                    <option value="{$province.name}" {php}if(in_array($province[
+                    'name'],$provinces))echo 'selected="selected"';{/php}>{$province.name}</option>
+                    {/volist}
+                </select>
+                <label>市</label>
+                <select name="city_type">
+                    <option value="1" {php}if(isset($srule_arr[10])&& $srule_arr[10][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[10])&& $srule_arr[10][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                </select>
+                <select name="city[]" id="city_container" multiple="multiple">
+                    <option value="0">请选择</option>
+                    {volist name="city_list" id="city"}
+                    <option value="{$city.name}" {php}if(in_array($city[
+                    'name'],$citys))echo 'selected="selected"';{/php}>{$city.name}</option>
+                    {/volist}
+                </select>
+
+            </div>
+
+        </div>
+
         <div class="row cl">
             <label class="form-label col-3">版本号</label>
             <div class="formControls col-2">
                 <select class="select-box" name="version_type">
-                    <option value="1" {php}if(isset($srule_arr[1])&& $srule_arr[1]['rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
-                    <option value="2" {php}if(isset($srule_arr[1])&& $srule_arr[1]['rule']==2) echo 'selected="selected"'; {/php}>包含</option>
-                    <option value="3" {php}if(isset($srule_arr[1])&& $srule_arr[1]['rule']==3) echo 'selected="selected"'; {/php}>大于等于</option>
-                    <option value="4" {php}if(isset($srule_arr[1])&& $srule_arr[1]['rule']==4) echo 'selected="selected"'; {/php}>小于等于</option>
+                    <option value="1" {php}if(isset($srule_arr[1])&& $srule_arr[1][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[1])&& $srule_arr[1][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                    <option value="3" {php}if(isset($srule_arr[1])&& $srule_arr[1][
+                    'rule']==3) echo 'selected="selected"'; {/php}>大于等于</option>
+                    <option value="4" {php}if(isset($srule_arr[1])&& $srule_arr[1][
+                    'rule']==4) echo 'selected="selected"'; {/php}>小于等于</option>
                 </select>
             </div>
             <div class="formControls col-3">
@@ -79,8 +154,10 @@
             <label class="form-label col-3">包名:</label>
             <div class="formControls col-2">
                 <select class="select-box" name="package_type">
-                    <option value="1" {php}if(isset($srule_arr[2])&& $srule_arr[2]['rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
-                    <option value="2" {php}if(isset($srule_arr[2])&& $srule_arr[2]['rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                    <option value="1" {php}if(isset($srule_arr[2])&& $srule_arr[2][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[2])&& $srule_arr[2][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
                 </select>
             </div>
             <div class="formControls col-3">
@@ -91,8 +168,10 @@
             <label class="form-label col-3">手机品牌:</label>
             <div class="formControls col-2">
                 <select class="select-box" name="brand_type">
-                    <option value="1" {php}if(isset($srule_arr[3])&& $srule_arr[3]['rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
-                    <option value="2" {php}if(isset($srule_arr[3])&& $srule_arr[3]['rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                    <option value="1" {php}if(isset($srule_arr[3])&& $srule_arr[3][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[3])&& $srule_arr[3][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
                 </select>
             </div>
             <div class="formControls col-3">
@@ -103,8 +182,10 @@
             <label class="form-label col-3">渠道:</label>
             <div class="formControls col-2">
                 <select class="select-box" name="channel_type">
-                    <option value="1" {php}if(isset($srule_arr[4])&& $srule_arr[4]['rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
-                    <option value="2" {php}if(isset($srule_arr[4])&& $srule_arr[4]['rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                    <option value="1" {php}if(isset($srule_arr[4])&& $srule_arr[4][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[4])&& $srule_arr[4][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
                 </select>
             </div>
             <div class="formControls col-3">
@@ -119,26 +200,38 @@
             <label class="form-label col-3">运营商:</label>
             <div class="formControls col-2">
                 <select class="select-box" name="phone_type">
-                    <option value="1" {php}if(isset($srule_arr[5])&& $srule_arr[5]['rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
-                    <option value="2" {php}if(isset($srule_arr[5])&& $srule_arr[5]['rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                    <option value="1" {php}if(isset($srule_arr[5])&& $srule_arr[5][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[5])&& $srule_arr[5][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
                 </select>
             </div>
             <div class="formControls col-3">
                 <textarea class="textarea" name="phone_content">{php}if(isset($srule_arr[5]['rule_content']))echo $srule_arr[5]['rule_content'];{/php}</textarea>
             </div>
         </div>
+        {php}
+        $net = [];
+        if(isset($srule_arr[6])){
+           $rule_content = $srule_arr[6]['rule_content'];
+           $net = explode(",",$rule_content);
+        }
+        {/php}
         <div class="row cl">
             <label class="form-label col-3">网络:</label>
             <div class="formControls col-2">
                 <select class="select-box" name="net_type">
-                    <option value="1" {php}if(isset($srule_arr[6])&& $srule_arr[6]['rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
-                    <option value="2" {php}if(isset($srule_arr[6])&& $srule_arr[6]['rule']==2) echo 'selected="selected"'; {/php}>包含</option>
+                    <option value="1" {php}if(isset($srule_arr[6])&& $srule_arr[6][
+                    'rule']==1) echo 'selected="selected"'; {/php}>不包含</option>
+                    <option value="2" {php}if(isset($srule_arr[6])&& $srule_arr[6][
+                    'rule']==2) echo 'selected="selected"'; {/php}>包含</option>
                 </select>
             </div>
             <div class="formControls col-3">
                 <select name="net_content[]" multiple="multiple" id="net_container">
-                    <option value="1">wifi</option>
-                    <option value="2">数据网络</option>
+                    <option value="wifi" {php}if(in_array("wifi",$net))echo 'selected="selected"';{/php}>wifi</option>
+                    <option value="mobile" {php}if(in_array("mobile",$net))echo 'selected="selected"';{/php}>数据网络</option>
+                    <option value="none" {php}if(in_array("none",$net))echo 'selected="selected"';{/php}>无网络</option>
                 </select>
             </div>
         </div>
@@ -152,32 +245,41 @@
             </div>
             {php}
             if(isset($srule_arr[7])){
-                $rule_content = explode(',',$srule_arr[7]['rule_content']);
-                $begin_time = $rule_content[0];
-                $begin_time_hour = $rule_content[1];
-                $end_time = $rule_content[2];
-                $end_time_hour = $rule_content[3];
+            $rule_content = explode(',',$srule_arr[7]['rule_content']);
+            $begin_time = $rule_content[0];
+            $begin_time_hour = $rule_content[1];
+            $end_time = $rule_content[2];
+            $end_time_hour = $rule_content[3];
 
             }
             {/php}
             <div class="formControls col-6">
-                <input type="text" name="start_time" class="text" value="{php}if(isset($begin_time))echo $begin_time;{/php}"/>
+                <input type="text" name="start_time" class="text"
+                       value="{php}if(isset($begin_time))echo $begin_time;{/php}"/>
                 <select name="start_time_hour">
                     {php}
                     for($i=0;$i<24;$i++){
                     if($i<10){
-                       if(isset($begin_time_hour) && $begin_time_hour=='0'.$i){
-                           echo '<option value="0'.$i.'" selected="selected">0'.$i.'</option>';
-                       }else{
-                          echo '<option value="0'.$i.'">0'.$i.'</option>';
-                       }
+                    if(isset($begin_time_hour) && $begin_time_hour=='0'.$i){
+                    echo '
+                    <option value="0'.$i.'" selected="selected">0'.$i.'</option>
+                    ';
+                    }else{
+                    echo '
+                    <option value="0'.$i.'">0'.$i.'</option>
+                    ';
+                    }
 
                     }else{
                     if(isset($begin_time_hour) && $begin_time_hour==$i){
-                         echo '<option value="'.$i.'" selected="selected">'.$i.'</option>';
-                     }else{
-                         echo '<option value="'.$i.'">'.$i.'</option>';
-                     }
+                    echo '
+                    <option value="'.$i.'" selected="selected">'.$i.'</option>
+                    ';
+                    }else{
+                    echo '
+                    <option value="'.$i.'">'.$i.'</option>
+                    ';
+                    }
 
                     }
 
@@ -189,17 +291,25 @@
                     {php}
                     for($i=0;$i<24;$i++){
                     if($i<10){
-                        if(isset($end_time_hour) && $end_time_hour=='0'.$i){
-                        echo '<option value="0'.$i.'" selected="selected">0'.$i.'</option>';
-                        }else{
-                        echo '<option value="0'.$i.'">0'.$i.'</option>';
-                        }
+                    if(isset($end_time_hour) && $end_time_hour=='0'.$i){
+                    echo '
+                    <option value="0'.$i.'" selected="selected">0'.$i.'</option>
+                    ';
                     }else{
-                        if(isset($end_time_hour) && $end_time_hour==$i){
-                        echo '<option value="'.$i.'" selected="selected">'.$i.'</option>';
-                        }else{
-                        echo '<option value="'.$i.'">'.$i.'</option>';
-                        }
+                    echo '
+                    <option value="0'.$i.'">0'.$i.'</option>
+                    ';
+                    }
+                    }else{
+                    if(isset($end_time_hour) && $end_time_hour==$i){
+                    echo '
+                    <option value="'.$i.'" selected="selected">'.$i.'</option>
+                    ';
+                    }else{
+                    echo '
+                    <option value="'.$i.'">'.$i.'</option>
+                    ';
+                    }
                     }
 
                     }
@@ -294,6 +404,9 @@
     $('#ad_select').multiselect();
     $('#net_container').multiselect();
     $('#channel_container').multiselect();
+    $('#country_container').multiselect();
+    $('#province_container').multiselect();
+    $('#city_container').multiselect();
 </script>
 </body>
 </html>
