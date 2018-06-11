@@ -20,7 +20,7 @@ class Ad extends Base
     public function index()
     {
         $map = array();
-        $list = \app\common\model\Ad::where($map)->paginate(10);
+        $list = \app\common\model\Ad::where($map)->order('id', 'desc')->paginate(10);
         $page = $list->render();
         $admin_list = $list->toArray();
         $admin_list = $admin_list['data'];
