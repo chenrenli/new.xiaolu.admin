@@ -62,6 +62,7 @@
                     if (obj.code == 200) {
                         $(obj).parents("tr").remove();
                         layer.msg('已删除!', {icon: 1, time: 1000});
+                        location.replace(location.href)
                     } else {
                         layer.msg(obj.msg);
                     }
