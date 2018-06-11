@@ -284,11 +284,11 @@ class Strategy extends Base
             $start_time_hour = input("start_time_hour");
             $end_time = input("end_time");
             $end_time_hour = input("end_time_hour");
-            $country = $_POST['country'];
+            $country = isset($_POST['country']) ? $_POST['country'] : "";
             $country_type = input("country_type");
-            $province = $_POST["province"];
+            $province = isset($_POST["province"]) ? $_POST['province'] : "";
             $province_type = input("province_type");
-            $city = $_POST["city"];
+            $city = isset($_POST["city"]) ? $_POST['city'] : "";
             $city_type = input("city_type");
 
             $id = input("id");
@@ -311,161 +311,155 @@ class Strategy extends Base
             $data['update_time'] = time();
             $map['id'] = $id;
             $res = $strategyModel->saveData($data, $map);
-            if ($res) {
-                //添加关联数据
-                if ($ad_ids) {
-                    StrategyAd::where(['strategy_id' => $id])->delete();
-                    //添加广告数据
-                    foreach ($ad_ids as $ad_id) {
-                        $strategyAdModel = new StrategyAd();
-                        $strategyAdModel->ad_id = $ad_id;
-                        $strategyAdModel->strategy_id = $id;
-                        $strategyAdModel->save();
-                    }
-                }
-                //添加规则数据
-                if ($version_content) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 1]);
-                    //版本
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 1;
-                    $strategyRuleModel->rule = $version_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = $version_content;
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
 
-                }
+            //删除数据
+            StrategyAd::where(['strategy_id' => $id])->delete();
+            //规则删除掉
+            StrategyRule::destroy(['strategy_id' => $id]);
+            //添加关联数据
+            if ($ad_ids) {
 
-                if ($package_content) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 2]);
-                    //包名
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 2;
-                    $strategyRuleModel->rule = $package_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = $package_content;
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
+                //添加广告数据
+                foreach ($ad_ids as $ad_id) {
+                    $strategyAdModel = new StrategyAd();
+                    $strategyAdModel->ad_id = $ad_id;
+                    $strategyAdModel->strategy_id = $id;
+                    $strategyAdModel->save();
                 }
-                if ($brand_content) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 3]);
-                    //手机品牌
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 3;
-                    $strategyRuleModel->rule = $brand_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = $brand_content;
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
-                }
-                if ($channel_content) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 4]);
-                    //渠道
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 4;
-                    $strategyRuleModel->rule = $channel_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = implode(",", $channel_content);
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
-                }
-                if ($phone_content) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 5]);
-                    //运营商
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 5;
-                    $strategyRuleModel->rule = $phone_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = $phone_content;
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-                }
-                if ($net_content) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 6]);
-                    //网络
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 6;
-                    $strategyRuleModel->rule = $net_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = implode(",", $net_content);
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-                }
-                if ($start_time || $end_time) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 7]);
-                    //日期
-                    $rule_content = '';
-                    if ($start_time) {
-                        $rule_content = $start_time . "," . $start_time_hour;
-                    }
-                    if ($end_time) {
-                        $rule_content = $rule_content . "," . $end_time . "," . $end_time_hour;
-                    }
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 7;
-                    $strategyRuleModel->rule = $date_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = $rule_content;
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
-                }
-                //地区
-                if ($country && count($country) >= 1) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 8]);
-                    //国家
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 8;
-                    $strategyRuleModel->rule = $country_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = implode(",", $country);
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
-                }
-                if ($province && count($province) >= 1) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 9]);
-                    //省
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 9;
-                    $strategyRuleModel->rule = $province_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = implode(",", $province);
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
-                }
-                if ($city && count($city) >= 1) {
-                    StrategyRule::destroy(['strategy_id' => $id, 'type' => 10]);
-                    //城市
-                    $strategyRuleModel = new StrategyRule();
-                    $strategyRuleModel->type = 10;
-                    $strategyRuleModel->rule = $city_type;
-                    $strategyRuleModel->strategy_id = $id;
-                    $strategyRuleModel->rule_content = implode(",", $city);
-                    $strategyRuleModel->create_time = time();
-                    $strategyRuleModel->update_time = time();
-                    $strategyRuleModel->save();
-
-                }
-
-                return output_data([], 200, ["msg" => "添加策略成功"]);
-            } else {
-                return output_error("添加策略失败");
             }
+            //添加规则数据
+            if ($version_content) {
+                //版本
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 1;
+                $strategyRuleModel->rule = $version_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = $version_content;
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+
+            if ($package_content) {
+                //包名
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 2;
+                $strategyRuleModel->rule = $package_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = $package_content;
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+            if ($brand_content) {
+                //手机品牌
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 3;
+                $strategyRuleModel->rule = $brand_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = $brand_content;
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+            if ($channel_content) {
+                //渠道
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 4;
+                $strategyRuleModel->rule = $channel_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = implode(",", $channel_content);
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+            if ($phone_content) {
+                //运营商
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 5;
+                $strategyRuleModel->rule = $phone_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = $phone_content;
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+            }
+            if ($net_content) {
+                //网络
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 6;
+                $strategyRuleModel->rule = $net_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = implode(",", $net_content);
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+            }
+            if ($start_time || $end_time) {
+
+                //日期
+                $rule_content = '';
+                if ($start_time) {
+                    $rule_content = $start_time . "," . $start_time_hour;
+                }
+                if ($end_time) {
+                    $rule_content = $rule_content . "," . $end_time . "," . $end_time_hour;
+                }
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 7;
+                $strategyRuleModel->rule = $date_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = $rule_content;
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+            //地区
+            if ($country && count($country) >= 1) {
+
+                //国家
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 8;
+                $strategyRuleModel->rule = $country_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = implode(",", $country);
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+            if ($province && count($province) >= 1) {
+                //省
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 9;
+                $strategyRuleModel->rule = $province_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = implode(",", $province);
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+            if ($city && count($city) >= 1) {
+                //城市
+                $strategyRuleModel = new StrategyRule();
+                $strategyRuleModel->type = 10;
+                $strategyRuleModel->rule = $city_type;
+                $strategyRuleModel->strategy_id = $id;
+                $strategyRuleModel->rule_content = implode(",", $city);
+                $strategyRuleModel->create_time = time();
+                $strategyRuleModel->update_time = time();
+                $strategyRuleModel->save();
+
+            }
+
+            return output_data([], 200, ["msg" => "编辑策略成功"]);
+
         } else {
             $id = input("id");
             $info = \app\common\model\Strategy::find($id);
