@@ -66,11 +66,11 @@ class Strategy extends Base
             $start_time_hour = input("start_time_hour");
             $end_time = input("end_time");
             $end_time_hour = input("end_time_hour");
-            $country = $_POST['country'];
+            $country = isset($_POST['country']) ? $_POST['country'] : "";
             $country_type = input("country_type");
-            $province = $_POST["province"];
+            $province = isset($_POST["province"]) ? $_POST['province'] : "";
             $province_type = input("province_type");
-            $city = $_POST["city"];
+            $city = isset($_POST["city"]) ? $_POST['city'] : "";
             $city_type = input("city_type");
 
             $validate = Validate::make([
