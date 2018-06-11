@@ -26,7 +26,7 @@ class App extends Base
         $positionModel = new Position();
         $position_list = $positionModel->where("status", 1)->select();
         $map = array();
-        $list = \app\common\model\App::where($map)->paginate(10);
+        $list = \app\common\model\App::where($map)->order('id',"desc")->paginate(10);
         $page = $list->render();
         $admin_list = $list->toArray();
         $admin_list = $admin_list['data'];
