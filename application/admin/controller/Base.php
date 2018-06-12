@@ -20,8 +20,8 @@ class Base extends Controller
         $this->checkLogin();
         $url = url($this->request->controller() . "/" . $this->request->action());
         $this->assign("url", $url);
-        $this->assign("admin_user",session("admin_user"));
-        $this->checkAccess();
+        $this->assign("admin_user", session("admin_user"));
+        //$this->checkAccess();
     }
 
     /**
@@ -35,8 +35,8 @@ class Base extends Controller
         $name = strtolower($this->request->controller() . "_" . $this->request->action());
         $access = $auth->check($name, $uid);
         if (!$access && $uid != 1) {
-            $url = url("Error/index");
-            redirect($url, array("msg" => "您没有权限操作", "type" => "error"));
+            $url = url("admin/Error/index");
+            $this->redirect($url, array("msg" => "您没有权限操作", "type" => "error"));
         }
     }
 
