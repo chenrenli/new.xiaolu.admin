@@ -26,6 +26,12 @@ class Ad extends Base
         $admin_list = $admin_list['data'];
         if ($admin_list) {
             foreach ($admin_list as &$val) {
+                $sdk = Sdk::find($val['sdk_id']);
+                $position = Position::find($val['position_id']);
+                $ad_title = $sdk ? $sdk->title . "-" : "";
+                $ad_title .= $position ? $position->title . "-" : "";
+                $ad_title .= $val['title'];
+                $val['ad_title'] = $ad_title;
                 $val['position_title'] = Position::where("id", $val['position_id'])->value("title");
             }
         }

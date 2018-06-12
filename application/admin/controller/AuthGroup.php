@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 use app\admin\controller\Base;
+use app\common\model\AuthGroupAccess;
 
 class AuthGroup extends Base{
 
@@ -40,6 +41,7 @@ class AuthGroup extends Base{
             $data['title'] = $title;
             $data['rules'] = $rules ? $rules:"";
             $result = (new \app\common\model\AuthGroup())->addData($data);
+            //添加关联的权限角色
             if($result){
                 $return['id'] = $result;
                 return output_data($return,200,array("msg"=>"添加角色成功"));

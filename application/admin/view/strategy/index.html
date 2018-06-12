@@ -34,6 +34,9 @@
             <td>{$data.weight}</td>
             <td>{if condition="$data.status eq 1"}开启{else}关闭{/if}</td>
             <td class="td-manage">
+                <button class="btn btn-primary radius" onclick="openOrClose({$data.id})">
+                    {if condition="$data.status eq 0"}开启{else}关闭{/if}
+                </button>
                 <a title="编辑" href="javascript:;"
                    onclick="editStrategy('策略编辑','{:url('admin/strategy/edit',array('id'=>$data['id']))}','900','500')"
                    class="ml-5" style="text-decoration:none">
@@ -135,6 +138,20 @@
                 }
             });
 
+        });
+    }
+
+    function openOrClose(strategy_id) {
+        $.ajax({
+            type: "POST",
+            url: "{:url('admin/Strategy/changeStatus')}",
+            data: {"strategy_id":strategy_id},
+            dataType: "json",
+            success: function (obj) {
+                if (obj.code == 200) {
+                    window.location.reload();
+                }
+            }
         });
     }
 </script>

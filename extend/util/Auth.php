@@ -13,8 +13,8 @@ class Auth{
      * 获取管理员的权限列表
      */
     public function getAdminRules($uid){
-        $sql = "select * from jp_auth_group_access as a
-                left join jp_auth_group  as b
+        $sql = "select * from xl_auth_group_access as a
+                left join xl_auth_group  as b
                 on a.group_id=b.id where a.uid='$uid'";
         $rows = Db::query($sql);
         $rules = '';

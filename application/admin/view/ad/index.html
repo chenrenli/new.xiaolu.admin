@@ -20,9 +20,10 @@
             <th width="25"><input type="checkbox" name="" value=""></th>
             <th width="40">ID</th>
             <th width="100">广告位置</th>
-            <th width="150">广告名称</th>
+            <th width="150">名称</th>
             <th width="150">appid</th>
             <th width="150">adid</th>
+            <th width="150">广告</th>
             <th width="100">操作</th>
         </tr>
         </thead>
@@ -35,7 +36,7 @@
             <td>{$data.title}</td>
             <td>{$data.appid}</td>
             <td>{$data.adid}</td>
-
+            <td>{$data.ad_title}</td>
             <td class="td-manage">
                 <a title="编辑" href="javascript:;"
                    onclick="edit('广告编辑','{:url('admin/ad/edit',array('id'=>$data['id']))}','1','800','500')"

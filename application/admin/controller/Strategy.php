@@ -26,7 +26,7 @@ class Strategy extends Base
     public function index()
     {
         $map = array();
-        $list = \app\common\model\Strategy::where($map)->order('id','desc')->paginate(10);
+        $list = \app\common\model\Strategy::where($map)->order('id', 'desc')->paginate(10);
         $page = $list->render();
         $admin_list = $list->toArray();
         $admin_list = $admin_list['data'];
@@ -545,5 +545,34 @@ class Strategy extends Base
                 return output_error("删除数据失败", -400);
             }
         }
+    }
+
+    /**
+     * 修改策略的状态
+     */
+    public function changeStatus()
+    {
+        $strategy_id = input("strategy_id");
+        $validate = Validate::make([
+            "strategy_id" => "require",
+        ]);
+        $data['strategy_id'] = $strategy_id;
+        if (!$validate->check($data)) {
+            return output_error($validate->getError());
+        }
+        $status = 0;
+        $strategy = \app\common\model\Strategy::find($strategy_id);
+        if (!$strategy) {
+            return output_error("策略不存在");
+        }
+        if ($strategy->status == 0) {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        \app\common\model\Strategy::update(['status' => $status], ['id' => $strategy_id]);
+
+        return output_data([], 200, array("msg" => "改变状态成功"));
+
     }
 }
