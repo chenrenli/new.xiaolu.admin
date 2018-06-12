@@ -34,7 +34,7 @@
             <td>{$data.weight}</td>
             <td>{if condition="$data.status eq 1"}开启{else}关闭{/if}</td>
             <td class="td-manage">
-                <button class="btn btn-primary radius" onclick="openOrClose({$data.id})">
+                <button class="btn {if condition='$data.status eq 0'}btn-primary{else}btn-danger{/if} radius" onclick="openOrClose({$data.id})">
                     {if condition="$data.status eq 0"}开启{else}关闭{/if}
                 </button>
                 <a title="编辑" href="javascript:;"
