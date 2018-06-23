@@ -45,8 +45,8 @@ class Redirect extends Response
     /**
      * 重定向传值（通过Session）
      * @access protected
-     * @param string|array  $name 变量名或者数组
-     * @param mixed         $value 值
+     * @param string|array $name 变量名或者数组
+     * @param mixed $value 值
      * @return $this
      */
     public function with($name, $value = null)
@@ -67,7 +67,12 @@ class Redirect extends Response
      */
     public function getTargetUrl()
     {
-        return (strpos($this->data, '://') || 0 === strpos($this->data, '/')) ? $this->data : Url::build($this->data, $this->params);
+        return Url::build($this->data,
+            $this->params);
+        /*
+        return (strpos($this->data, '://') || 0 === strpos($this->data, '/')) ? $this->data : Url::build($this->data,
+            $this->params);
+        */
     }
 
     public function params($params = [])

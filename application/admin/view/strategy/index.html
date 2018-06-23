@@ -32,9 +32,12 @@
             <td>{$data.id}</td>
             <td>{$data.title}</td>
             <td>{$data.weight}</td>
-            <td>{if condition="$data.status eq 1"}<span class="label label-success radius">开启</span>{else}<span class="label label-fail radius">关闭</span>{/if}</td>
+            <td>{if condition="$data.status eq 1"}<span class="label label-success radius">开启</span>{else}<span
+                    class="label label-fail radius">关闭</span>{/if}
+            </td>
             <td class="td-manage">
-                <button class="btn {if condition='$data.status eq 0'}btn-primary{else}btn-danger{/if} radius" onclick="openOrClose({$data.id})">
+                <button class="btn {if condition='$data.status eq 0'}btn-primary{else}btn-danger{/if} radius"
+                        onclick="openOrClose({$data.id})">
                     {if condition="$data.status eq 0"}开启{else}关闭{/if}
                 </button>
                 <a title="编辑" href="javascript:;"
@@ -145,11 +148,13 @@
         $.ajax({
             type: "POST",
             url: "{:url('admin/Strategy/changeStatus')}",
-            data: {"strategy_id":strategy_id},
+            data: {"strategy_id": strategy_id},
             dataType: "json",
             success: function (obj) {
                 if (obj.code == 200) {
                     window.location.reload();
+                } else {
+                    layer.alert(obj.msg);
                 }
             }
         });

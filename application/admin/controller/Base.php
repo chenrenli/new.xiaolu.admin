@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use app\common\model\TopicCate;
 use think\Controller;
 use think\Paginator;
+use think\Request;
 use think\Route;
 
 class Base extends Controller
@@ -21,6 +22,7 @@ class Base extends Controller
         $url = url($this->request->controller() . "/" . $this->request->action());
         $this->assign("url", $url);
         $this->assign("admin_user", session("admin_user"));
+
         //$this->checkAccess();
     }
 
@@ -33,11 +35,21 @@ class Base extends Controller
         $uid = isset($user['uid']) ? $user['uid'] : 0;
         $auth = new \util\Auth();
         $name = strtolower($this->request->controller() . "_" . $this->request->action());
-        $access = $auth->check($name, $uid);
-        if (!$access && $uid != 1) {
-            $url = url("admin/Error/index");
-            $this->redirect($url, array("msg" => "您没有权限操作", "type" => "error"));
+        //排除几个页面
+        $notCheckNames = ["index_index", "welcome_index"];
+        if (!in_array($name, $notCheckNames)) {
+            $access = $auth->check($name, $uid);
+            if (!$access && $uid != 1) {
+                if (Request::instance()->isAjax()) {
+                    echo json_encode(output_error("您没有权限操作"));
+                    exit();
+                } else {
+                    $url = url("Error/index");
+                    $this->redirect($url, array("msg" => "您没有权限操作", "type" => "error"));
+                }
+            }
         }
+
     }
 
     protected function modifyStatus($model, $field = 'id')
