@@ -248,7 +248,7 @@ class Strategy extends Base
                     if ($sdk) {
                         $title = $sdk->title ? $sdk->title : "";
                         $title .= isset($position->title) ? "-" . $position->title : "";
-                        $title .= isset($ad->title) ? "_" . $ad->title : "";
+                        $title .= isset($ad->title) ? "-" . $ad->title : "";
                         $ad->title = $title;
                     }
                 }
@@ -512,7 +512,7 @@ class Strategy extends Base
                     if ($sdk) {
                         $title = $sdk->title ? $sdk->title : "";
                         $title .= isset($position->title) ? "-" . $position->title : "";
-                        $title .= isset($ad->title) ? "_" . $ad->title : "";
+                        $title .= isset($ad->title) ? "-" . $ad->title : "";
                         $ad->title = $title;
                     }
                 }
