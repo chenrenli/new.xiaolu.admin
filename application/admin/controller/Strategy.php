@@ -246,7 +246,10 @@ class Strategy extends Base
                     $position = Position::find($ad->position_id);
                     $sdk = Sdk::find($ad->sdk_id);
                     if ($sdk) {
-                        $ad->title = $sdk->title . "-" . $position->title . "-" . $ad->title;
+                        $title = $sdk->title ? $sdk->title : "";
+                        $title .= isset($position->title) ? "-" . $position->title : "";
+                        $title .= isset($ad->title) ? "_" . $ad->title : "";
+                        $ad->title = $title;
                     }
                 }
             }
