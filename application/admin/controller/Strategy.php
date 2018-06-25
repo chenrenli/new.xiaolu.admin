@@ -581,4 +581,20 @@ class Strategy extends Base
         return output_data([], 200, array("msg" => "改变状态成功"));
 
     }
+
+    public function getAdList()
+    {
+        $sdk_id = input("sdk_id");
+        $validate = Validate::make([
+            "sdk_id" => "require",
+        ]);
+        $data['sdk_id'] = $sdk_id;
+        if (!$validate->check($data)) {
+            return output_error($validate->getError());
+        }
+        $ad_list = Ad::where("sdk_id", $sdk_id)->select();
+
+        return output_data($ad_list, 200, array("msg" => "获取广告成功"));
+
+    }
 }
