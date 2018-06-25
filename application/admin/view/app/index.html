@@ -73,7 +73,7 @@
         layer_show(title, url, w, h);
     }
     /*用户-删除*/
-    function del(obj, id) {
+    function del(ob, id) {
         layer.confirm('确认要删除吗？', function (index) {
             $.ajax({
                 type: "post",
@@ -82,7 +82,7 @@
                 dataType: "json",
                 success: function (obj) {
                     if (obj.code == 200) {
-                        $(obj).parents("tr").remove();
+                        $(ob).parents("tr").remove();
                         layer.msg('已删除!', {icon: 1, time: 1000});
                     } else {
                         layer.msg(obj.msg);
