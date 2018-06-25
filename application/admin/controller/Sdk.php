@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\model\AppAd;
 use think\Config;
 use think\Validate;
 
@@ -109,6 +110,10 @@ class Sdk extends Base
     {
         if ($this->request->isAjax()) {
             $id = $this->request->param("id");
+            $app_ad = AppAd::where("sdk_id", $id)->find();
+            if ($app_ad) {
+                return output_error("sdk已被绑定到应用,不能删除");
+            }
             $map['id'] = array("in", $id);
             $result = \app\common\model\Sdk::destroy($map);
             if ($result) {

@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\model\App;
 use think\Config;
 use think\Validate;
 
@@ -92,6 +93,10 @@ class Channel extends Base
     {
         if ($this->request->isAjax()) {
             $id = $this->request->param("id");
+            $app = App::where("channel_id", $id)->find();
+            if ($app) {
+                return output_error("渠道已经被绑定到应用之中,不能删除,如要删除请先删除应用之中的信息");
+            }
             $map['id'] = array("in", $id);
             $result = \app\common\model\Channel::destroy($map);
             if ($result) {

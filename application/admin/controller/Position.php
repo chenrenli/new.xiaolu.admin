@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\model\Ad;
 use think\Config;
 use think\Validate;
 
@@ -98,6 +99,11 @@ class Position extends Base
     {
         if ($this->request->isAjax()) {
             $id = $this->request->param("id");
+            $ad = Ad::where("position_id", $id)->find();
+            if ($ad) {
+                return output_error("广告类型已被应用到广告之中,不能删除");
+            }
+
             $map['id'] = array("in", $id);
             $result = \app\common\model\Position::destroy($map);
             if ($result) {
