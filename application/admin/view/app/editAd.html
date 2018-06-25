@@ -8,7 +8,8 @@
                 <select class="select-box" name="sdk_id">
                     <option value="0">请选择</option>
                     {volist name="sdk_list" id="sdk"}
-                    <option value="{$sdk.id}" {if condition="$sdk.id eq $app_ad.sdk_id"}selected="selected"{/if}>{$sdk.title}</option>
+                    <option value="{$sdk.id}" {if condition="$sdk.id eq $app_ad.sdk_id" }selected="selected" {
+                    /if}>{$sdk.title}</option>
                     {/volist}
                 </select>
             </div>
@@ -20,7 +21,9 @@
                 <select class="select-box" name="position_id">
                     <option value="0">请选择</option>
                     {volist name="position_list" id="position"}
-                    <option value="{$position.id}" {if condition="$position.id eq $app_ad.position_id"}selected="selected"{/if}>{$position.title}</option>
+                    <option value="{$position.id}" {if condition="$position.id eq $app_ad.position_id"
+                            }selected="selected" {
+                    /if}>{$position.title}</option>
                     {/volist}
                 </select>
             </div>
@@ -29,14 +32,14 @@
         <div class="row cl">
             <label class="form-label col-3">广告包名:</label>
             <div class="formControls col-5">
-                <input name="adpackagename"  value="{$app_ad.adpackagename}" class="input-text" type="text"/>
+                <input name="adpackagename" value="{$app_ad.adpackagename}" class="input-text" type="text"/>
             </div>
             <div class="col-4"></div>
         </div>
         <div class="row cl">
             <label class="form-label col-3"><span class="c-red">*</span>appid:</label>
             <div class="formControls col-5">
-                <input type="text" class="input-text" name="appid"  value="{$app_ad.appid}"/>
+                <input type="text" class="input-text" name="appid" value="{$app_ad.appid}"/>
             </div>
             <div class="col-4"></div>
         </div>
@@ -47,7 +50,16 @@
             </div>
             <div class="col-4"></div>
         </div>
-
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>是否debug:</label>
+            <div class="formControls col-5">
+                <label>否</label>
+                <input name="is_debug" type="radio" value="0" {if condition="$app_ad.is_debug eq 0" }checked="checked" {/if}/>
+                <label>是</label>
+                <input name="is_debug" type="radio" value="1" {if condition="$app_ad.is_debug eq 1" }checked="checked" {/if}/>
+            </div>
+            <div class="col-4"></div>
+        </div>
 
         <div class="row cl">
             <div class="col-9 col-offset-3">
@@ -99,9 +111,9 @@
                     var datas = obj.data;
                     var html = '';
                     for (var i = 0; i < datas.length; i++) {
-                        if(datas[i]['id']==ad_id){
+                        if (datas[i]['id'] == ad_id) {
                             html += '<option value="' + datas[i]['id'] + '" selected="selected">' + datas[i]['title'] + '</option>';
-                        }else{
+                        } else {
                             html += '<option value="' + datas[i]['id'] + '">' + datas[i]['title'] + '</option>';
                         }
 

@@ -26,7 +26,7 @@ class App extends Base
         $positionModel = new Position();
         $position_list = $positionModel->where("status", 1)->select();
         $map = array();
-        $list = \app\common\model\App::where($map)->order('id',"desc")->paginate(10);
+        $list = \app\common\model\App::where($map)->order('id', "desc")->paginate(10);
         $page = $list->render();
         $admin_list = $list->toArray();
         $admin_list = $admin_list['data'];
@@ -183,6 +183,7 @@ class App extends Base
             $appid = input("appid");
             $adid = input("adid");
             $adpackagename = input("adpackagename");
+            $is_debug = input("is_debug");
             $id = input("id");
             $position_id = input("position_id");
             $validate = Validate::make([
@@ -203,8 +204,8 @@ class App extends Base
             }
             $data['app_id'] = $data['id'];
             unset($data['id']);
-            $app_ad = AppAd::where(['app_id'=>$id,"position_id"=>$position_id])->find();
-            if($app_ad){
+            $app_ad = AppAd::where(['app_id' => $id, "position_id" => $position_id])->find();
+            if ($app_ad) {
                 return output_error("同一个位置设置有同一个sdk");
             }
             $data['adpackagename'] = $adpackagename;
@@ -215,6 +216,7 @@ class App extends Base
             $sdk = $sdkModel->where("id", $sdk_id)->find();
             $data['sdk_title'] = $sdk->title;
             $data['position_title'] = $position->title;
+            $data['is_debug'] = $is_debug;
             $appAdModel = new AppAd();
             $res = $appAdModel->addData($data);
             if ($res) {
@@ -246,13 +248,14 @@ class App extends Base
             $adid = input("adid");
             $adpackagename = input("adpackagename", "");
             $id = input("id");
+            $is_debug = input("is_debug");
             $position_id = input("position_id");
             $validate = Validate::make([
                 "sdk_id" => "require",
                 "id" => "require",
                 "position_id" => "require",
-                "appid"=>"require",
-                "adid" =>"require",
+                "appid" => "require",
+                "adid" => "require",
             ]);
             $data['sdk_id'] = $sdk_id;
             $data['position_id'] = $position_id;
@@ -267,8 +270,9 @@ class App extends Base
             if (!$app_ad) {
                 return output_error("不存在广告sdk");
             }
-            $app_ad = AppAd::where(['app_id'=>$app_ad->app_id,"position_id"=>$position_id])->whereNotIn("id",$id)->find();
-            if($app_ad){
+            $app_ad = AppAd::where(['app_id' => $app_ad->app_id, "position_id" => $position_id])->whereNotIn("id",
+                $id)->find();
+            if ($app_ad) {
                 return output_error("同一个位置设置有同一个sdk");
             }
             $data['adpackagename'] = $adpackagename;
@@ -277,8 +281,9 @@ class App extends Base
             $position = $positionModel->where("id", $position_id)->find();
             $sdkModel = new Sdk();
             $sdk = $sdkModel->where("id", $sdk_id)->find();
-            $data['sdk_title'] = $sdk->title;
-            $data['position_title'] = $position->title;
+            $data['sdk_title'] = isset($sdk->title) ? $sdk->title : '';
+            $data['position_title'] = isset($position->title) ? $position->title : "";
+            $data['is_debug'] = $is_debug;
             $appAdModel = new AppAd();
             $res = $appAdModel->saveData($data, ['id' => $id]);
             if ($res) {
