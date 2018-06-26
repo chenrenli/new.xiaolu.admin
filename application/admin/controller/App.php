@@ -286,11 +286,8 @@ class App extends Base
             $data['is_debug'] = $is_debug;
             $appAdModel = new AppAd();
             $res = $appAdModel->saveData($data, ['id' => $id]);
-            if ($res) {
-                return output_data([], 200, ["msg" => "设置sdk成功"]);
-            } else {
-                return output_error("设置sdk失败");
-            }
+  
+            return output_data([], 200, ["msg" => "设置sdk成功"]);
 
 
         } else {
