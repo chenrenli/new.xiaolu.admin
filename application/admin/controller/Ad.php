@@ -52,6 +52,7 @@ class Ad extends Base
             $status = input("status");
             $packagename = input("packagename");
             $sdk_id = input("sdk_id");
+            $is_debug= input("is_debug");
             $validate = Validate::make([
                 'title' => "require",
                 'position_id' => "require",
@@ -72,6 +73,7 @@ class Ad extends Base
             $data['create_time'] = time();
             $data['update_time'] = time();
             $data['packagename'] = $packagename;
+            $data['is_debug'] = $is_debug;
             $res = $sdk->addData($data);
             if ($res) {
                 return output_data([], 200, ["msg" => "添加广告成功"]);
@@ -99,6 +101,7 @@ class Ad extends Base
             $status = input("status");
             $packagename = input("packagename");
             $sdk_id = input("sdk_id");
+            $is_debug = input("is_debug");
             $validate = Validate::make([
                 'title' => "require",
                 "id" => "require",
@@ -122,6 +125,7 @@ class Ad extends Base
             $data['status'] = $status;
             $data['update_time'] = time();
             $data['packagename'] = $packagename;
+            $data['is_debug'] = $is_debug;
             $res = $sdk->saveData($data, $map);
             if ($res) {
                 return output_data([], 200, ["msg" => "编辑广告成功"]);
