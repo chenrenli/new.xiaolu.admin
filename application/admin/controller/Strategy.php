@@ -80,6 +80,9 @@ class Strategy extends Base
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
+            if (strtotime($end_time) < strtotime($start_time)) {
+                return output_error("结束时间不能少于开始时间");
+            }
             $strategyModel = new \app\common\model\Strategy();
             $data['weight'] = $weight;
             $data['status'] = $status;
@@ -314,6 +317,10 @@ class Strategy extends Base
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
+            if (strtotime($end_time) < strtotime($start_time)) {
+                return output_error("结束时间不能少于开始时间");
+            }
+
             unset($data['id']);
             $strategyModel = new \app\common\model\Strategy();
             $data['weight'] = $weight;
