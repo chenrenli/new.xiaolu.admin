@@ -55,10 +55,10 @@ class Ad extends Base
             $is_debug= input("is_debug");
             $validate = Validate::make([
                 'title' => "require",
-                'position_id' => "require",
+                'position_id' => "gt:0",
                 "appid" => "require",
                 "adid" => "require",
-                "sdk_id" => "require",
+                "sdk_id" => "require|gt:0",
             ]);
             $data['title'] = $title;
             $data['position_id'] = $position_id;
@@ -105,10 +105,10 @@ class Ad extends Base
             $validate = Validate::make([
                 'title' => "require",
                 "id" => "require",
-                'position_id' => "require",
+                'position_id' => "require|gt:0",
                 "appid" => "require",
                 "adid" => "require",
-                "sdk_id" => "require",
+                "sdk_id" => "require|gt:0",
             ]);
             $data['title'] = $title;
             $data['id'] = $id;
@@ -116,6 +116,7 @@ class Ad extends Base
             $data['appid'] = $appid;
             $data['adid'] = $adid;
             $data['sdk_id'] = $sdk_id;
+
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }

@@ -286,7 +286,7 @@ class App extends Base
             $data['is_debug'] = $is_debug;
             $appAdModel = new AppAd();
             $res = $appAdModel->saveData($data, ['id' => $id]);
-  
+
             return output_data([], 200, ["msg" => "设置sdk成功"]);
 
 
