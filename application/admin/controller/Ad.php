@@ -52,14 +52,14 @@ class Ad extends Base
             $status = input("status");
             $packagename = input("packagename");
             $sdk_id = input("sdk_id");
-            $is_debug= input("is_debug");
+            $is_debug = input("is_debug");
             $validate = Validate::make([
                 'title' => "require",
                 'position_id' => "gt:0",
                 "appid" => "require",
                 "adid" => "require",
                 "sdk_id" => "require|gt:0",
-            ]);
+            ],["position_id" => "广告类型必须选择"]);
             $data['title'] = $title;
             $data['position_id'] = $position_id;
             $data['appid'] = $appid;
@@ -109,7 +109,7 @@ class Ad extends Base
                 "appid" => "require",
                 "adid" => "require",
                 "sdk_id" => "require|gt:0",
-            ]);
+            ], ["position_id" => "广告类型必须选择"]);
             $data['title'] = $title;
             $data['id'] = $id;
             $data['position_id'] = $position_id;
