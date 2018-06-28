@@ -347,6 +347,8 @@ class Strategy extends Base
             }
             //添加规则数据
             if ($version_content) {
+                $version_content = str_replace("\r\n", ",", $version_content);
+                $version_content = str_replace("\n", ",", $version_content);
                 //版本
                 $strategyRuleModel = new StrategyRule();
                 $strategyRuleModel->type = 1;
@@ -360,6 +362,8 @@ class Strategy extends Base
             }
 
             if ($package_content) {
+                $package_content = str_replace("\r\n", ",", $package_content);
+                $package_content = str_replace("\n", ",", $package_content);
                 //包名
                 $strategyRuleModel = new StrategyRule();
                 $strategyRuleModel->type = 2;
@@ -372,6 +376,8 @@ class Strategy extends Base
 
             }
             if ($brand_content) {
+                $brand_content = str_replace("\r\n", ",", $brand_content);
+                $brand_content = str_replace("\n", ",", $brand_content);
                 //手机品牌
                 $strategyRuleModel = new StrategyRule();
                 $strategyRuleModel->type = 3;
@@ -396,6 +402,8 @@ class Strategy extends Base
 
             }
             if ($phone_content) {
+                $phone_content = str_replace("\r\n", ",", $phone_content);
+                $phone_content = str_replace("\n", ",", $phone_content);
                 //运营商
                 $strategyRuleModel = new StrategyRule();
                 $strategyRuleModel->type = 5;
