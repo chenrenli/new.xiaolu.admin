@@ -47,7 +47,7 @@ class Update extends Base
                 "type" => "require",
             ]);
             $data['version'] = $version;
-            $data['ver'] = str_replace(".", "", $version);
+            $data['ver'] = intval(str_replace(".", "", $version));
             $data['file_path'] = $file_path;
             $data['sdk_id'] = $sdk_id;
             $data['key'] = $key;
@@ -98,7 +98,7 @@ class Update extends Base
 
             ]);
             $data['version'] = $version;
-            $data['ver'] = str_replace(".", "", $version);
+            $data['ver'] = intval(str_replace(".", "", $version));
             $data['file_path'] = $file_path;
             $data['id'] = $id;
             $data['sdk_id'] = $sdk_id;
