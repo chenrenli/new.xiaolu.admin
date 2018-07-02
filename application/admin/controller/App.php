@@ -206,7 +206,7 @@ class App extends Base
             unset($data['id']);
             $app_ad = AppAd::where(['app_id' => $id, "position_id" => $position_id])->find();
             if ($app_ad) {
-                return output_error("同一个位置设置有同一个sdk");
+                return output_error("同一个广告类型只能设置一个默认的sdk");
             }
             $data['adpackagename'] = $adpackagename;
 
@@ -273,7 +273,7 @@ class App extends Base
             $app_ad = AppAd::where(['app_id' => $app_ad->app_id, "position_id" => $position_id])->whereNotIn("id",
                 $id)->find();
             if ($app_ad) {
-                return output_error("同一个位置设置有同一个sdk");
+                return output_error("同一个广告类型只能设置一个默认的sdk");
             }
             $data['adpackagename'] = $adpackagename;
 

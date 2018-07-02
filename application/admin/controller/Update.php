@@ -20,7 +20,7 @@ class Update extends Base
     public function index()
     {
         $map = array();
-        $list = \app\common\model\Update::where($map)->order('id','desc')->paginate(10);
+        $list = \app\common\model\Update::where($map)->order('id', 'desc')->paginate(10);
         $page = $list->render();
         $admin_list = $list->toArray();
         $admin_list = $admin_list['data'];
@@ -112,11 +112,9 @@ class Update extends Base
             $map['id'] = $id;
             $sdk = new \app\common\model\Update();
             $res = $sdk->saveData($data, $map);
-            if ($res) {
-                return output_data([], 200, ["msg" => "编辑更新信息成功"]);
-            } else {
-                return output_error("编辑更新信息失败");
-            }
+
+            return output_data([], 200, ["msg" => "编辑更新信息成功"]);
+
         } else {
             $id = $this->request->param("id");
             $info = \app\common\model\Update::get($id);
