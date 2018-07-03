@@ -49,10 +49,20 @@ class Update extends Base
             $data['version'] = $version;
             $data['ver'] = intval(str_replace(".", "", $version));
             $data['file_path'] = $file_path;
-            $data['sdk_id'] = $sdk_id;
+
             $data['key'] = $key;
             $data['type'] = $type;
-            $data['app_id'] = $app_id;
+            if ($type == 0) {
+                if ($app_id <= 0) {
+                    return output_error("请选择应用");
+                }
+                $data['app_id'] = $app_id;
+            } else {
+                if ($sdk_id <= 0) {
+                    return output_error("请选择sdk");
+                }
+                $data['sdk_id'] = $sdk_id;
+            }
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }
@@ -92,7 +102,6 @@ class Update extends Base
                 'version' => "require",
                 "id" => "require",
                 "file_path" => "require",
-                "sdk_id" => "require",
                 "key" => "require",
                 "type" => 'require',
 
@@ -101,10 +110,20 @@ class Update extends Base
             $data['ver'] = intval(str_replace(".", "", $version));
             $data['file_path'] = $file_path;
             $data['id'] = $id;
-            $data['sdk_id'] = $sdk_id;
+            if ($type == 1) {
+                if ($sdk_id <= 0) {
+                    return output_error("请选择sdk");
+                }
+                $data['sdk_id'] = $sdk_id;
+            } else {
+                if ($app_id <= 0) {
+                    return output_error("请选择应用");
+                }
+                $data['app_id'] = $app_id;
+            }
             $data['key'] = $key;
             $data['type'] = $type;
-            $data['app_id'] = $app_id;
+
             if (!$validate->check($data)) {
                 return output_error($validate->getError());
             }

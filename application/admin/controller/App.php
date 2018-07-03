@@ -187,11 +187,12 @@ class App extends Base
             $id = input("id");
             $position_id = input("position_id");
             $validate = Validate::make([
-                "sdk_id" => "require",
+                "sdk_id" => "require|gt:0",
                 "id" => "require",
                 "appid" => "require",
                 "adid" => "require",
-            ]);
+                "position_id" => "require|gt:0"
+            ], ['sdk_id' => "请选择sdk", 'position_id' => "请选择广告类型"]);
 
 
             $data['sdk_id'] = $sdk_id;
@@ -214,8 +215,8 @@ class App extends Base
             $position = $positionModel->where("id", $position_id)->find();
             $sdkModel = new Sdk();
             $sdk = $sdkModel->where("id", $sdk_id)->find();
-            $data['sdk_title'] = $sdk->title;
-            $data['position_title'] = $position->title;
+            $data['sdk_title'] = isset($sdk->title) ? $sdk->title : "";
+            $data['position_title'] = isset($position->title) ? $position->title : "";
             $data['is_debug'] = $is_debug;
             $appAdModel = new AppAd();
             $res = $appAdModel->addData($data);
@@ -251,11 +252,9 @@ class App extends Base
             $is_debug = input("is_debug");
             $position_id = input("position_id");
             $validate = Validate::make([
-                "sdk_id" => "require",
+                "sdk_id" => "require|gt:0",
                 "id" => "require",
-                "position_id" => "require",
-                "appid" => "require",
-                "adid" => "require",
+                "position_id" => "require|gt:0",
             ]);
             $data['sdk_id'] = $sdk_id;
             $data['position_id'] = $position_id;
